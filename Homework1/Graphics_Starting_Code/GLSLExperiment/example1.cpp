@@ -8,6 +8,8 @@
 // Number of points in polyline
 int NumPoints = 0;
 
+// Function to draw
+void(*drawImage)(void);
 
 // remember to prototype
 void generateGeometry( void );
@@ -25,6 +27,9 @@ using namespace std;
 // Array for polyline
 point2 points[10000];
 GLuint program;
+
+// Mode for drawing
+GLenum mode = GL_LINE_LOOP;
 /* -------------------------------------------------------------- */
 
 
@@ -52,7 +57,9 @@ void GenerateSeirpinski(void)
 	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
 	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
 
-	NumPoints = 5000;
+	mode = GL_POINTS;
+
+	NumPoints = 10000;
 	point2 vertices[3];
 	vertices[0] = point2(-1.0, -1.0);
 	vertices[1] = point2(0.0, 1.0);
@@ -108,7 +115,7 @@ void shaderSetup( void )
     glEnableVertexAttribArray( loc );
     glVertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
-	mat4 ortho = Ortho2D(-2.0, 2.0, -2.0, 2.0);
+	mat4 ortho = Ortho2D(-1.0, 1.0, -1.0, 1.0);
 	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
 	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
 
@@ -120,7 +127,7 @@ void display( void )
 {
 	// All drawing happens in display function
     glClear( GL_COLOR_BUFFER_BIT );                // clear window
-    glDrawArrays( GL_POINTS, 0, NumPoints );    // draw the points
+    glDrawArrays( mode, 0, NumPoints );    // draw the points
     glFlush();										// force output to graphics hardware
 }
 
@@ -130,6 +137,10 @@ void keyboard( unsigned char key, int x, int y )
 	// keyboard handler
 
     switch ( key ) {
+	case 's':
+		GenerateSeirpinski();
+		display();
+		break;
     case 033:			// 033 is Escape key octal value
         exit(1);		// quit program
         break;
