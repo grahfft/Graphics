@@ -15,25 +15,10 @@
 // Number of points in polyline
 int NumPoints = 0;
 
-// Function to draw
-void(*drawImage)(void);
-
-// Triangle Proto-type
-void GenerateTriangle(void);
-
-// Seirpinski Proto-type TODO: move into C++ object
-void GenerateSeirpinski(void);
-
-// Generate Data File Prototyping
-void DataFileShader(float left, float right, float bottom, float top);
-void DataFileGeometry(void);
-void DataFileInitBuffers(void);
-void DataFileDrawImage(void);
-void GenerateDataFile(void);
-
 // General Functions
 void initGPUBuffers( void );
 void CopyGeometryToBuffer(Data *data);
+void GenerateImage(Data *data);
 
 // Initialization prototypes
 void InitWindow(int argc, char **argv);
@@ -50,86 +35,18 @@ using namespace std;
 point2 points[10000];
 GLuint program;
 
-// Mode for drawing
-GLenum mode = GL_LINE_LOOP;
+// Images
+Triangle *triangle;
+Sierpinski *gasket;
 /* -------------------------------------------------------------- */
 
-/* Generate Triangle */
-void GenerateTriangle(void)
+void GenerateImage(Data *data) 
 {
-	Triangle *data = new Triangle(program);
-	mode = GL_LINE_LOOP;
-
 	CopyGeometryToBuffer(data);
-
 	initGPUBuffers();
 	data->SetupShader();
 	data->DrawImage();
 }
-
-/* ------------------------------------------------------------- */
-
-/* Seirpinski Section */
-void GenerateSeirpinski(void)
-{
-	/*
-	Author's Notes:
-		- Requires GL_POINTS to correctly draw
-		- Drew 5000 iterations (NumPoints = 5000)
-		- Re-read chapter 2
-		- swap bug caused by not passing points into framebuffer; LINE_LOOP Test
-		- default loc and proj are needed; best represented by a section each per 
-	*/
-
-	Sierpinski *data = new Sierpinski(program);
-	mode = GL_LINE_LOOP;
-
-	CopyGeometryToBuffer(data);
-
-	initGPUBuffers();
-	data->SetupShader();
-	data->DrawImage();
-}
-/* ------------------------------------------------------------- */
-
-/* Generate Homegrown Image File */
-
-void DataFileShader(float left, float right, float bottom, float top) 
-{
-	mat4 ortho = Ortho2D(left, right, bottom, top);
-	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
-	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
-
-	// Initialize the vertex position attribute from the vertex shader
-	GLuint loc = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-}
-
-void DataFileGeometry(void)
-{
-
-}
-
-void DataFileInitBuffers(void)
-{
-	initGPUBuffers();
-}
-
-void DataFileDrawImage(void)
-{
-
-}
-
-void GenerateDataFile(void)
-{
-	DataFileGeometry();
-	DataFileInitBuffers();
-	//DataFileShader(left, right, bottom, top);
-	DataFileDrawImage();
-}
-
-/* ------------------------------------------------------------- */
 
 void CopyGeometryToBuffer(Data *data)
 {
@@ -167,13 +84,33 @@ void display( void )
 void keyboard( unsigned char key, int x, int y )
 {
 	// keyboard handler
+	Data *data;
 
     switch ( key ) {
 	case 's':
-		GenerateSeirpinski();
+		/*
+		Author's Notes:
+		- Requires GL_POINTS to correctly draw
+		- Drew 5000 iterations (NumPoints = 5000)
+		- Re-read chapter 2
+		- swap bug caused by not passing points into framebuffer; LINE_LOOP Test
+		- default loc and proj are needed; best represented by a section each per
+		*/
+		if (!gasket)
+		{
+			gasket = new Sierpinski(program);
+
+		}
+
+		GenerateImage(gasket);
 		break;
 	case 't':
-		GenerateTriangle();
+		if (!triangle)
+		{
+			triangle = new Triangle(program);
+		}
+		
+		GenerateImage(triangle);
 		break;
 	case 'u':
 		//TODO Generate USA file
@@ -223,8 +160,11 @@ int main( int argc, char **argv )
 	InitShader();
 	InitCallbacks();
 
-	// GenerateDatFile();
-	GenerateTriangle();                             
+	if (!triangle)
+	{
+		triangle = new Triangle(program);
+	}
+	GenerateImage(triangle);
 
 	// Can add minimalist menus here
 	// add mouse handler
