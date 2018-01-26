@@ -7,6 +7,7 @@
 #define __IMAGES__
 
 #include "Triangle.h"
+#include "Sierpinski.h"
 
 #endif // !__DATA__
 
@@ -21,10 +22,6 @@ void(*drawImage)(void);
 void GenerateTriangle(void);
 
 // Seirpinski Proto-type TODO: move into C++ object
-void SeirpinskiShader(void);
-void SeirpinskiGeometry(void);
-void SeirpinskiInitBuffers(void);
-void SeirpinskiDrawImage(void);
 void GenerateSeirpinski(void);
 
 // Generate Data File Prototyping
@@ -73,49 +70,6 @@ void GenerateTriangle(void)
 /* ------------------------------------------------------------- */
 
 /* Seirpinski Section */
-
-void SeirpinskiShader(void) 
-{
-	mat4 ortho = Ortho2D(-2.0, 2.0, -2.0, 2.0);
-	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
-	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
-
-	// Initialize the vertex position attribute from the vertex shader
-	GLuint loc = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-}
-
-void SeirpinskiGeometry(void)
-{
-	NumPoints = 10000;
-	point2 vertices[3];
-	vertices[0] = point2(-1.0, -1.0);
-	vertices[1] = point2(0.0, 1.0);
-	vertices[2] = point2(1.0, -1.0);
-
-	points[0] = point2(.25, .5);
-
-	for (int index = 1; index < NumPoints; index++)
-	{
-		int determineVertex = rand() % 3;
-		points[index] = (points[index - 1] + vertices[determineVertex]) / 2.0;
-	}
-}
-
-void SeirpinskiInitBuffers(void)
-{
-	mode = GL_POINTS;
-	initGPUBuffers();
-}
-
-void SeirpinskiDrawImage(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT);                // clear window
-	glDrawArrays(mode, 0, NumPoints);    // draw the points
-	glFlush();
-}
-
 void GenerateSeirpinski(void)
 {
 	/*
@@ -127,10 +81,14 @@ void GenerateSeirpinski(void)
 		- default loc and proj are needed; best represented by a section each per 
 	*/
 
-	SeirpinskiGeometry();
-	SeirpinskiInitBuffers();
-	SeirpinskiShader();
-	SeirpinskiDrawImage();
+	Sierpinski *data = new Sierpinski(program);
+	mode = GL_LINE_LOOP;
+
+	CopyGeometryToBuffer(data);
+
+	initGPUBuffers();
+	data->SetupShader();
+	data->DrawImage();
 }
 /* ------------------------------------------------------------- */
 

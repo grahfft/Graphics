@@ -1,8 +1,3 @@
 ﻿  example1.cpp
-  Generating Code...
-  Compiling...
-  Triangle.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  Data.cpp
+Data.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   GLSLExperiment.vcxproj -> C:\Users\denni\Documents\Graphics\Homework1\Graphics_Starting_Code\Debug\GLSLExperiment.exe
