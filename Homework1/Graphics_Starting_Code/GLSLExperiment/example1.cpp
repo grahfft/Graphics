@@ -12,6 +12,7 @@ int NumPoints = 0;
 // remember to prototype
 void generateGeometry( void );
 void GenerateSeirpinski(void);
+void GenerateDatFile(void);
 void initGPUBuffers( void );
 void shaderSetup( void );
 void display( void );
@@ -57,6 +58,13 @@ void GenerateSeirpinski(void)
 		int determineVertex = rand() % 3;
 		points[index] = (points[index - 1] + vertices[determineVertex]) / 2.0;
 	}
+}
+
+void GenerateDatFile(void)
+{
+	//mat4 ortho = Ortho2D(left, right, bottom, top);
+	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
+	//glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
 }
 
 /* ------------------------------------------------------------- */
@@ -124,6 +132,7 @@ int main( int argc, char **argv )
 
     glewInit();										// init glew
 
+	GenerateDatFile();
     generateGeometry( );                           // Call function that generates points to draw
 	//GenerateSeirpinski();
 	initGPUBuffers( );							   // Create GPU buffers
