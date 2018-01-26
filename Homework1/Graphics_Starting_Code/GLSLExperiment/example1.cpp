@@ -53,6 +53,8 @@ void GenerateSeirpinski(void)
 	vertices[1] = point2(0.0, 0.5);
 	vertices[2] = point2(0.5, -0.5);
 
+	points[0] = point2(0.125, 0.25);
+
 	for (int index = 1; index < NumPoints; index++)
 	{
 		int determineVertex = rand() % 3;
@@ -103,7 +105,7 @@ void display( void )
 {
 	// All drawing happens in display function
     glClear( GL_COLOR_BUFFER_BIT );                // clear window
-    glDrawArrays( GL_LINE_LOOP, 0, NumPoints );    // draw the points
+    glDrawArrays( GL_POINTS, 0, NumPoints );    // draw the points
     glFlush();										// force output to graphics hardware
 }
 
@@ -133,8 +135,8 @@ int main( int argc, char **argv )
     glewInit();										// init glew
 
 	GenerateDatFile();
-    generateGeometry( );                           // Call function that generates points to draw
-	//GenerateSeirpinski();
+    //generateGeometry( );                           // Call function that generates points to draw
+	GenerateSeirpinski();
 	initGPUBuffers( );							   // Create GPU buffers
     shaderSetup( );                                // Connect this .cpp file to shader file
 
