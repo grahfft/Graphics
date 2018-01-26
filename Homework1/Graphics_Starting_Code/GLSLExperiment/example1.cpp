@@ -3,7 +3,7 @@
 // The function generateGeometry can be modified to draw many 2D drawings (e.g. 2D Sierpinski Gasket)
 // Generated using randomly selected vertices and bisection
 
-#include "Angel.h"  // Angel.h is homegrown include file, which also includes glew and freeglut
+#include "Data.h"  // Angel.h is homegrown include file, which also includes glew and freeglut
 
 // Number of points in polyline
 int NumPoints = 0;
@@ -12,10 +12,6 @@ int NumPoints = 0;
 void(*drawImage)(void);
 
 // Triangle Proto-type TODO: move into C++ object
-void TriangleGeometry(void);
-void TriangleInitBuffers(void);
-void TriangleShaders(void);
-void TriangleDrawImage();
 void GenerateTriangle(void);
 
 // Seirpinski Proto-type TODO: move into C++ object
@@ -26,7 +22,7 @@ void SeirpinskiDrawImage(void);
 void GenerateSeirpinski(void);
 
 // Generate Data File Prototyping
-void DataFileShader(void);
+void DataFileShader(float left, float right, float bottom, float top);
 void DataFileGeometry(void);
 void DataFileInitBuffers(void);
 void DataFileDrawImage(void);
@@ -34,6 +30,7 @@ void GenerateDataFile(void);
 
 // General Functions
 void initGPUBuffers( void );
+void CopyGeometryToBuffer(Data *data);
 
 // Initialization prototypes
 void InitWindow(int argc, char **argv);
@@ -44,7 +41,7 @@ void InitShader(void);
 void display( void );
 void keyboard( unsigned char key, int x, int y );
 
-typedef vec2 point2;
+
 
 using namespace std;
 
@@ -57,50 +54,19 @@ GLenum mode = GL_LINE_LOOP;
 /* -------------------------------------------------------------- */
 
 /* Generate Triangle */
-void TriangleGeometry( void )
-{
-	// Specifiy the vertices for a triangle
-	NumPoints = 3;
-
-	points[0] = point2( -0.5, -0.5 );
-	points[1] = point2( 0.0, 0.5 );
-	points[2] = point2( 0.5, -0.5 );
-}
-
-void TriangleInitBuffers(void)
-{
-	mode = GL_LINE_LOOP;
-	initGPUBuffers();
-}
-
-void TriangleShaders(void)
-{
-	// Initialize the vertex position attribute from the vertex shader
-	GLuint loc = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-	mat4 ortho = Ortho2D(-1.0, 1.0, -1.0, 1.0);
-	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
-	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
-}
-
-void TriangleDrawImage()
-{
-	glClear(GL_COLOR_BUFFER_BIT);                // clear window
-	glDrawArrays(mode, 0, NumPoints);    // draw the points
-	glFlush();
-}
-
 void GenerateTriangle(void)
 {
-	TriangleGeometry();
-	TriangleInitBuffers();
-	TriangleShaders();
-	TriangleDrawImage();
+	Data *data = new Data(program);
+	mode = GL_LINE_LOOP;
+
+	CopyGeometryToBuffer(data);
+
+	initGPUBuffers();
+	data->SetupShader();
+	data->DrawImage();
 }
 
-/* -------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 
 /* Seirpinski Section */
 
@@ -162,12 +128,20 @@ void GenerateSeirpinski(void)
 	SeirpinskiShader();
 	SeirpinskiDrawImage();
 }
+/* ------------------------------------------------------------- */
 
 /* Generate Homegrown Image File */
 
-void DataFileShader(void) 
+void DataFileShader(float left, float right, float bottom, float top) 
 {
+	mat4 ortho = Ortho2D(left, right, bottom, top);
+	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
+	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
 
+	// Initialize the vertex position attribute from the vertex shader
+	GLuint loc = glGetAttribLocation(program, "vPosition");
+	glEnableVertexAttribArray(loc);
+	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 }
 
 void DataFileGeometry(void)
@@ -177,7 +151,7 @@ void DataFileGeometry(void)
 
 void DataFileInitBuffers(void)
 {
-
+	initGPUBuffers();
 }
 
 void DataFileDrawImage(void)
@@ -187,12 +161,24 @@ void DataFileDrawImage(void)
 
 void GenerateDataFile(void)
 {
-	//mat4 ortho = Ortho2D(left, right, bottom, top);
-	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
-	//glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
+	DataFileGeometry();
+	DataFileInitBuffers();
+	//DataFileShader(left, right, bottom, top);
+	DataFileDrawImage();
 }
 
 /* ------------------------------------------------------------- */
+
+void CopyGeometryToBuffer(Data *data)
+{
+	data->GenerateGeometry();
+	NumPoints = data->points.size();
+
+	for (int index = 0; index < NumPoints; index++)
+	{
+		points[index] = data->points[index];
+	}
+}
 
 void initGPUBuffers( void )
 {
@@ -208,15 +194,13 @@ void initGPUBuffers( void )
     glBufferData( GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW );
 }
 
-
 void display( void )
 {
 	// All drawing happens in display function
     glClear( GL_COLOR_BUFFER_BIT );                // clear window
-    glDrawArrays( mode, 0, NumPoints );    // draw the points
+    glDrawArrays( GL_LINE_LOOP, 0, NumPoints );    // draw the points
     glFlush();										// force output to graphics hardware
 }
-
 
 void keyboard( unsigned char key, int x, int y )
 {
@@ -228,6 +212,15 @@ void keyboard( unsigned char key, int x, int y )
 		break;
 	case 't':
 		GenerateTriangle();
+		break;
+	case 'u':
+		//TODO Generate USA file
+		break;
+	case 'd':
+		//TODO Generate dragon file
+		break;
+	case 'v':
+		//TODO Generate Vinci file
 		break;
     case 033:			// 033 is Escape key octal value
         exit(1);		// quit program
