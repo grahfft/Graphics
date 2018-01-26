@@ -47,13 +47,18 @@ void GenerateSeirpinski(void)
 		- Drew 5000 iterations (NumPoints = 5000)
 		- Re-read chapter 2
 	*/
+
+	mat4 ortho = Ortho2D(-2.0, 2.0, -2.0, 2.0);
+	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
+	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
+
 	NumPoints = 5000;
 	point2 vertices[3];
-	vertices[0] = point2(-0.5, -0.5);
-	vertices[1] = point2(0.0, 0.5);
-	vertices[2] = point2(0.5, -0.5);
+	vertices[0] = point2(-1.0, -1.0);
+	vertices[1] = point2(0.0, 1.0);
+	vertices[2] = point2(1.0, -1.0);
 
-	points[0] = point2(0.125, 0.25);
+	points[0] = point2(.25, .5);
 
 	for (int index = 1; index < NumPoints; index++)
 	{
@@ -61,6 +66,12 @@ void GenerateSeirpinski(void)
 		points[index] = (points[index - 1] + vertices[determineVertex]) / 2.0;
 	}
 }
+
+/*
+Author-s Notes:
+	- Adding Proj * vPosition causes other drawings to break; why?; Default Proj needed
+	- 
+*/
 
 void GenerateDatFile(void)
 {
@@ -96,6 +107,10 @@ void shaderSetup( void )
     GLuint loc = glGetAttribLocation( program, "vPosition" );
     glEnableVertexAttribArray( loc );
     glVertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+
+	mat4 ortho = Ortho2D(-2.0, 2.0, -2.0, 2.0);
+	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
+	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
 
     glClearColor( 1.0, 1.0, 1.0, 1.0 );        // sets white as color used to clear screen
 }
