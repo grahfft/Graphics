@@ -3,7 +3,13 @@
 // The function generateGeometry can be modified to draw many 2D drawings (e.g. 2D Sierpinski Gasket)
 // Generated using randomly selected vertices and bisection
 
-#include "Data.h"  // Angel.h is homegrown include file, which also includes glew and freeglut
+#ifndef __IMAGES__
+#define __IMAGES__
+
+#include "Triangle.h"
+
+#endif // !__DATA__
+
 
 // Number of points in polyline
 int NumPoints = 0;
@@ -11,7 +17,7 @@ int NumPoints = 0;
 // Function to draw
 void(*drawImage)(void);
 
-// Triangle Proto-type TODO: move into C++ object
+// Triangle Proto-type
 void GenerateTriangle(void);
 
 // Seirpinski Proto-type TODO: move into C++ object
@@ -41,8 +47,6 @@ void InitShader(void);
 void display( void );
 void keyboard( unsigned char key, int x, int y );
 
-
-
 using namespace std;
 
 // Array for polyline
@@ -56,7 +60,7 @@ GLenum mode = GL_LINE_LOOP;
 /* Generate Triangle */
 void GenerateTriangle(void)
 {
-	Data *data = new Data(program);
+	Triangle *data = new Triangle(program);
 	mode = GL_LINE_LOOP;
 
 	CopyGeometryToBuffer(data);
