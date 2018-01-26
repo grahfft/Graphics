@@ -6,11 +6,12 @@
 #include "Angel.h"  // Angel.h is homegrown include file, which also includes glew and freeglut
 
 // Number of points in polyline
-const int NumPoints = 5000;
+int NumPoints = 0;
 
 
 // remember to prototype
 void generateGeometry( void );
+void GenerateSeirpinski(void);
 void initGPUBuffers( void );
 void shaderSetup( void );
 void display( void );
@@ -21,7 +22,7 @@ typedef vec2 point2;
 using namespace std;
 
 // Array for polyline
-point2 points[NumPoints];
+point2 points[10000];
 GLuint program;
 /* -------------------------------------------------------------- */
 
@@ -30,6 +31,8 @@ GLuint program;
 void generateGeometry( void )
 {
 	// Specifiy the vertices for a triangle
+	NumPoints = 3;
+
 	points[0] = point2( -0.5, -0.5 );
 	points[1] = point2( 0.0, 0.5 );
 	points[2] = point2( 0.5, -0.5 );
@@ -43,6 +46,7 @@ void GenerateSeirpinski(void)
 		- Drew 5000 iterations (NumPoints = 5000)
 		- Re-read chapter 2
 	*/
+	NumPoints = 5000;
 	point2 vertices[3];
 	vertices[0] = point2(-0.5, -0.5);
 	vertices[1] = point2(0.0, 0.5);
@@ -91,7 +95,7 @@ void display( void )
 {
 	// All drawing happens in display function
     glClear( GL_COLOR_BUFFER_BIT );                // clear window
-    glDrawArrays( GL_POINTS, 0, NumPoints );    // draw the points
+    glDrawArrays( GL_LINE_LOOP, 0, NumPoints );    // draw the points
     glFlush();										// force output to graphics hardware
 }
 
@@ -120,8 +124,8 @@ int main( int argc, char **argv )
 
     glewInit();										// init glew
 
-    //generateGeometry( );                           // Call function that generates points to draw
-	GenerateSeirpinski();
+    generateGeometry( );                           // Call function that generates points to draw
+	//GenerateSeirpinski();
 	initGPUBuffers( );							   // Create GPU buffers
     shaderSetup( );                                // Connect this .cpp file to shader file
 
