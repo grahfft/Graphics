@@ -51,6 +51,7 @@ void GenerateSeirpinski(void)
 		- Requires GL_POINTS to correctly draw
 		- Drew 5000 iterations (NumPoints = 5000)
 		- Re-read chapter 2
+		- swap bug caused by not passing points into framebuffer; LINE_LOOP Test
 	*/
 
 	mat4 ortho = Ortho2D(-2.0, 2.0, -2.0, 2.0);
@@ -72,6 +73,9 @@ void GenerateSeirpinski(void)
 		int determineVertex = rand() % 3;
 		points[index] = (points[index - 1] + vertices[determineVertex]) / 2.0;
 	}
+
+	initGPUBuffers();
+	shaderSetup();
 }
 
 /*
@@ -161,8 +165,8 @@ int main( int argc, char **argv )
     glewInit();										// init glew
 
 	GenerateDatFile();
-    //generateGeometry( );                           // Call function that generates points to draw
-	GenerateSeirpinski();
+    generateGeometry( );                           // Call function that generates points to draw
+	//GenerateSeirpinski();
 	initGPUBuffers( );							   // Create GPU buffers
     shaderSetup( );                                // Connect this .cpp file to shader file
 
