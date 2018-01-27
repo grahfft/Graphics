@@ -156,21 +156,7 @@ void keyboard( unsigned char key, int x, int y )
 // width and height are in pixels
 void reshape(int width, int height)
 {
-	float ratio = (myCurrentData->right - myCurrentData->left) / (myCurrentData->top - myCurrentData->bottom);
-	float windowRatio = width / height;
-
-	if (ratio > windowRatio)
-	{
-		glViewport(0, 0, width, width / ratio);
-	}
-	else if (ratio < windowRatio)
-	{
-		glViewport(0, 0, height * ratio, height);
-	}
-	else 
-	{
-		glViewport(0, 0, width, height);
-	}
+	myCurrentData->ResizeImage(width, height);
 }
 
 /* -------------------------------------------------------------- */

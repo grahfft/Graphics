@@ -95,6 +95,8 @@ void DatFile::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
 
+	
+
 	int startPoint = 0;
 
 	for (int index = 0; index < this->pointsPerLine.size(); index++)

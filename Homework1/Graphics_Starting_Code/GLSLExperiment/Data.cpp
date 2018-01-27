@@ -12,5 +12,26 @@ void Data::SetupShader()
 	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 }
 
+void Data::ResizeImage(int newWidth, int newHeight) {
+	width = newWidth;
+	height = newHeight;
+
+	float ratio = (this->right - this->left) / (this->top - this->bottom);
+	float windowRatio = width / height;
+
+	if (ratio > windowRatio)
+	{
+		glViewport(0, 0, width, width / ratio);
+	}
+	else if (ratio < windowRatio)
+	{
+		glViewport(0, 0, height * ratio, height);
+	}
+	else
+	{
+		glViewport(0, 0, width, height);
+	}
+}
+
 
 

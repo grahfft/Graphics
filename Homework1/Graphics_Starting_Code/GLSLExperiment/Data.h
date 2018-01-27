@@ -37,7 +37,9 @@ public:
 	void virtual GenerateGeometry() {};
 	void SetupShader();
 	void virtual DrawImage() {};
+	void ResizeImage(int newWidth, int newHeight);
 
+	int width, height;
 	float right, left, bottom, top;
 	vector<point2> points;
 	GLuint program;
