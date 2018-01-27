@@ -28,6 +28,7 @@ void InitShader(void);
 // Callbacks
 void display( void );
 void keyboard( unsigned char key, int x, int y );
+void reshape(int width, int height);
 
 // Array for polyline
 point2 points[MAXPOINTS];
@@ -152,9 +153,24 @@ void keyboard( unsigned char key, int x, int y )
 	display();
 }
 
-void reshape()
+// width and height are in pixels
+void reshape(int width, int height)
 {
+	float ratio = (myCurrentData->right - myCurrentData->left) / (myCurrentData->top - myCurrentData->bottom);
+	float windowRatio = width / height;
 
+	if (ratio > windowRatio)
+	{
+		glViewport(0, 0, width, width / ratio);
+	}
+	else if (ratio < windowRatio)
+	{
+		glViewport(0, 0, height * ratio, height);
+	}
+	else 
+	{
+		glViewport(0, 0, width, height);
+	}
 }
 
 /* -------------------------------------------------------------- */
@@ -183,7 +199,7 @@ void InitCallbacks(void)
 {
 	glutDisplayFunc(display);                    // Register display callback function
 	glutKeyboardFunc(keyboard);                  // Register keyboard callback function
-
+	glutReshapeFunc(reshape);
 }
 
 /* -------------------------------------------------------------- */
