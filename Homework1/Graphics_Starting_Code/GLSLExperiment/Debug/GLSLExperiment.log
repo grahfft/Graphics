@@ -1,4 +1,5 @@
 ﻿  DatFile.cpp
-c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(17): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(52): warning C4018: '<': signed/unsigned mismatch
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(15): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(81): warning C4018: '<': signed/unsigned mismatch
+Data.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
   GLSLExperiment.vcxproj -> C:\Users\denni\Documents\Graphics\Homework1\Graphics_Starting_Code\Debug\GLSLExperiment.exe

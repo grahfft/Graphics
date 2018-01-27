@@ -1,7 +1,5 @@
 #include "DatFile.h"
-#include <iostream>
-#include <iomanip>
-#include <fstream>
+
 
 void DatFile::GenerateGeometry()
 {
@@ -18,6 +16,37 @@ void DatFile::GenerateGeometry()
 			return;
 		}
 
+		string oneLine;
+		bool startParse = false;
+
+		while (inFile)
+		{
+			//Take in and parse the line
+			getline(inFile, oneLine, '\n');	
+			istringstream iss(oneLine);
+			vector<string> tokens{ istream_iterator<string>{iss},
+				istream_iterator<string>{} };
+
+			if (!startParse)
+			{
+				if (tokens.size() == 1 && tokens[0][0] == '*')
+				{
+					startParse = true;
+					cout << "Start Parsing " + oneLine << endl;
+					continue;
+				}
+				cout << "Skip Parsing : " + oneLine + " Token size: " + std::to_string(tokens.size()) << endl;
+			}
+			else 
+			{
+				// Add Line logic here
+				cout << "Parsing stuff " + oneLine << endl;
+			}
+		}
+
+		cout << "End Parse" << endl;
+
+		inFile.close();
 		/* TODO: 
 			- Load in file
 			The structure of GRS files is:

@@ -5,6 +5,13 @@
 
 #include "Angel.h"
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include <ostream>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include <iterator>
 typedef vec2 point2;
 
 using namespace std;
