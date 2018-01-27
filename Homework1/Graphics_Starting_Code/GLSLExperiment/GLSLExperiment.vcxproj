@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Data.cpp" />
+    <ClCompile Include="DatFile.cpp" />
     <ClCompile Include="example1.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="Sierpinski.cpp" />
@@ -95,11 +96,17 @@
     <ClInclude Include="Angel.h" />
     <ClInclude Include="CheckError.h" />
     <ClInclude Include="Data.h" />
+    <ClInclude Include="DatFile.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="Sierpinski.h" />
     <ClInclude Include="textfile.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="vec.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\HomegrownFiles\dragon.dat">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

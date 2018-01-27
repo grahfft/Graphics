@@ -3,10 +3,10 @@
 void Sierpinski::GenerateGeometry()
 {
 	this->left = -2.0;
+	this->top = 2.0;
 	this->right = 2.0;
 	this->bottom = -2.0;
-	this->top = 2.0;
-
+	
 	this->points = vector<point2>(10000);
 	point2 vertices[3];
 

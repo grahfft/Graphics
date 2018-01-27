@@ -8,6 +8,7 @@
 
 #include "Triangle.h"
 #include "Sierpinski.h"
+#include "DatFile.h"
 
 #endif // !__DATA__
 
@@ -38,6 +39,9 @@ GLuint program;
 // Images
 Triangle *triangle;
 Sierpinski *gasket;
+DatFile *usa;
+DatFile *dragon;
+DatFile *vinci;
 /* -------------------------------------------------------------- */
 
 void GenerateImage(Data *data) 
@@ -114,12 +118,30 @@ void keyboard( unsigned char key, int x, int y )
 		break;
 	case 'u':
 		//TODO Generate USA file
+		if (!usa)
+		{
+			usa = new DatFile(program, "usa.dat");
+		}
+
+		GenerateImage(usa);
 		break;
 	case 'd':
 		//TODO Generate dragon file
+		if (!dragon)
+		{
+			dragon = new DatFile(program, "dragon.dat");
+		}
+
+		GenerateImage(dragon);
 		break;
 	case 'v':
 		//TODO Generate Vinci file
+		if (!vinci)
+		{
+			vinci = new DatFile(program, "vinci.dat");
+		}
+
+		GenerateImage(vinci);
 		break;
     case 033:			// 033 is Escape key octal value
         exit(1);		// quit program
