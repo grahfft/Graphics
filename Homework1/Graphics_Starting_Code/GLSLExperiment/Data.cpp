@@ -14,7 +14,7 @@ void Data::SetupShader()
 }
 
 /* Generic Resize method for maintaining aspect ratio */
-void Data::ResizeImage(int newWidth, int newHeight) {
+void Data::ResizeImage(int start_x, int start_y, int newWidth, int newHeight) {
 	width = newWidth;
 	height = newHeight;
 
@@ -23,17 +23,16 @@ void Data::ResizeImage(int newWidth, int newHeight) {
 
 	if (ratio > windowRatio)
 	{
-		glViewport(0, 0, width, width / ratio);
+		glViewport(start_x, start_y, width, width / ratio);
 	}
 	else if (ratio < windowRatio)
 	{
-		glViewport(0, 0, height * ratio, height);
+		glViewport(start_x, start_y, height * ratio, height);
 	}
 	else
 	{
-		glViewport(0, 0, width, height);
+		glViewport(start_x, start_y, width, height);
 	}
 }
-
 
 

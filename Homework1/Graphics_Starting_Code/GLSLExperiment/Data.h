@@ -16,6 +16,8 @@
 typedef vec2 point2;
 
 #define MAXPOINTS 50000
+
+/* Predefined conversions found here: https://stackoverflow.com/questions/1638437/given-an-angle-and-length-how-do-i-calculate-the-coordinates */
 #define radian2degree(a) (a * 57.295779513082)
 #define degree2radian(a) (a * 0.017453292519)
 
@@ -40,7 +42,7 @@ public:
 	void virtual GenerateGeometry() {};
 	void SetupShader();
 	void virtual DrawImage() {};
-	void ResizeImage(int newWidth, int newHeight);
+	void ResizeImage(int start_x, int start_y, int newWidth, int newHeight);
 
 	int width, height;
 	float right, left, bottom, top;

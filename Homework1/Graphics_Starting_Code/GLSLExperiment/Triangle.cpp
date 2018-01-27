@@ -27,7 +27,7 @@ void Triangle::DrawImage()
 	h = this->height / 6;
 	for (int k = 0; k<6; k++) {
 		for (int m = 0; m<6; m++) {
-			glViewport(k * w, m * h, w, h);
+			this->ResizeImage(k * w, m * h, w, h);
 			glDrawArrays(GL_LINE_LOOP, 0, this->points.size());
 		}
 	}

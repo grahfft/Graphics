@@ -28,7 +28,6 @@ void Sierpinski::GenerateGeometry()
 void Sierpinski::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
-	this->ResizeImage(this->width, this->height);
 	glDrawArrays(GL_POINTS, 0, this->points.size());    // draw the points
 	glFlush();
 }

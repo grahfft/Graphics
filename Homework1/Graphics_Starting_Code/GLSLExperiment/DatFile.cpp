@@ -101,7 +101,8 @@ void DatFile::DrawImage()
 	h = this->height / 4;
 	for (int k = 0; k<4; k++) {
 		for (int m = 0; m<4; m++) {
-			glViewport(k * w, m * h, w, h);
+			this->ResizeImage(k * w, m * h, w, h);
+			
 			int startPoint = 0;
 
 			for (int index = 0; index < this->pointsPerLine.size(); index++)

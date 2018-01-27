@@ -93,7 +93,7 @@ void display( void )
 	CopyGeometryToBuffer(myCurrentData);
 	initGPUBuffers();
 	myCurrentData->SetupShader();
-	myCurrentData->ResizeImage(currentWidth, currentHeight);
+	myCurrentData->ResizeImage(0,0,currentWidth, currentHeight);
 	myCurrentData->DrawImage();
 }
 

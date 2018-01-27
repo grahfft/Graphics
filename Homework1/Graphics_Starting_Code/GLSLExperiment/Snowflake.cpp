@@ -4,7 +4,6 @@
 /* Creates world window and starting triangle; Begins the recursive calls for all three sides */
 void Snowflake::GenerateGeometry()
 {
-	// Leave empty?
 	this->left = -1;
 	this->right = 1;
 	this->bottom = -1;
@@ -17,16 +16,15 @@ void Snowflake::GenerateGeometry()
 
 	int n = this->iteration;
 
-	this->DrawKoch(vertex1, vertex2, n, degree2radian(this->GetAngle(vertex1, vertex2)));
-	this->DrawKoch(vertex2, vertex3, n, degree2radian(this->GetAngle(vertex2, vertex3)));
-	this->DrawKoch(vertex3, vertex1, n, degree2radian(this->GetAngle(vertex3, vertex1)));
+	this->DrawKoch(vertex1, vertex2, n, this->GetAngle(vertex1, vertex2));
+	this->DrawKoch(vertex2, vertex3, n, this->GetAngle(vertex2, vertex3));
+	this->DrawKoch(vertex3, vertex1, n, this->GetAngle(vertex3, vertex1));
 }
 
 /* Draws a linestrip connecting all points */
 void Snowflake::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
-	this->ResizeImage(this->width, this->height);
 	glDrawArrays(GL_LINE_STRIP, 0, this->points.size());    // draw the points
 	glFlush();
 }
@@ -81,12 +79,12 @@ point2 Snowflake::CreatePointFromStartpoint(point2 vertex, float length, float d
 	return *newPoint;
 }
 
-/* Creates an angle in degrees */
+/* Creates an angle in degrees; Starter Shell Found Here: https://stackoverflow.com/questions/9970281/java-calculating-the-angle-between-two-points-in-degrees */
 float Snowflake::GetAngle(point2 start, point2 target) {
-	float angle = radian2degree(atan2(target.y - start.y, target.x - start.x));
+	float angle = atan2(target.y - start.y, target.x - start.x);
 
 	if (angle < 0) {
-		angle += 360;
+		angle += degree2radian(360);
 	}
 
 	return angle;
