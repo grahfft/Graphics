@@ -19,6 +19,8 @@ void DatFile::GenerateGeometry()
 		string oneLine;
 		bool startParse = false;
 
+		int totalLines = 0;
+
 		while (inFile)
 		{
 			//Take in and parse the line
@@ -27,36 +29,66 @@ void DatFile::GenerateGeometry()
 			vector<string> tokens{ istream_iterator<string>{iss},
 				istream_iterator<string>{} };
 
+			// Determine when to start parsing
 			if (!startParse)
 			{
 				if (tokens.size() == 1 && tokens[0][0] == '*')
 				{
-					startParse = true;
-					cout << "Start Parsing " + oneLine << endl;
-					continue;
+					startParse = true;			
 				}
-				cout << "Skip Parsing : " + oneLine + " Token size: " + std::to_string(tokens.size()) << endl;
+				continue;
 			}
-			else 
-			{
-				// Add Line logic here
-				cout << "Parsing stuff " + oneLine << endl;
-			}
-		}
 
-		cout << "End Parse" << endl;
-
-		inFile.close();
-		/* TODO: 
-			- Load in file
-			The structure of GRS files is:
+			/*
+				The structure of GRS files is:
 
 				a number of comment lines, followed by a line starting with at least one asterisk: '*'. - ignore
 				The "extent" of the figure: (left, top, right, bottom). - set to left top right bottom
 				The number of polylines in the figure. - init pointsPerLine
 				The list of polylines: each starts with the number of points in the polyline, followed by the (x, y) pairs for each point. - add first value to pointsPerLine, create point out of subsequent lines
 		
-		*/
+			*/
+			int pplAttribute;
+			int numberOfTokens = tokens.size();
+
+			switch (numberOfTokens)
+			{
+			case 1:
+				pplAttribute = stoi(tokens[0]);
+
+				if (pointsPerLine.size() == 0)
+				{
+					totalLines = pplAttribute;
+					pointsPerLine = vector<int>(pplAttribute);
+				}
+				else {
+					pointsPerLine.push_back(pplAttribute);
+				}
+				break;
+			case 4:
+				this->left = stoi(tokens[0]);
+				this->top = stoi(tokens[1]);
+				this->right = stoi(tokens[2]);
+				this->bottom = stoi(tokens[3]);
+
+				cout << "Left: " << this->left << " Top: " << this->top << " Right: " << this->right << " Bottom: " << this->bottom << endl;
+				break;
+			default:
+				//cout << "ERROR!!!! Shouldn't get here" << endl;
+				break;
+			}
+
+			
+
+			/*for (int index = 0; index < pointsPerLine.size(); index++)
+			{
+				cout << "Points Per Line: " + to_string(pointsPerLine[index]) << endl;
+			}*/
+		}
+
+		cout << "Expected Size of PPL: " << totalLines << " Size of Points Per Line: " << this->pointsPerLine.size() << endl;
+
+		inFile.close();
 	}
 }
 
