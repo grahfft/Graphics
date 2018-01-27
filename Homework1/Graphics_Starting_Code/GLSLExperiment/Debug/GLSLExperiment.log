@@ -1,2 +1,6 @@
 ﻿  example1.cpp
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\example1.cpp(94): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\example1.cpp(162): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\example1.cpp(163): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\example1.cpp(172): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   GLSLExperiment.vcxproj -> C:\Users\denni\Documents\Graphics\Homework1\Graphics_Starting_Code\Debug\GLSLExperiment.exe

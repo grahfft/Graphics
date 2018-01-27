@@ -21,6 +21,14 @@ void Triangle::GenerateGeometry()
 void Triangle::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
-	glDrawArrays(GL_LINE_LOOP, 0, points.size());    // draw the points
+	float w, h;
+	w = this->width / 6;
+	h = this->height / 6;
+	for (int k = 0; k<6; k++) {
+		for (int m = 0; m<6; m++) {
+			glViewport(k * w, m * h, w, h);
+			glDrawArrays(GL_LINE_LOOP, 0, this->points.size());
+		}
+	}
 	glFlush();
 }

@@ -43,6 +43,8 @@ DatFile *vinci;
 
 // Current Image Data
 Data *myCurrentData;
+float currentWidth = 640;
+float currentHeight = 480;
 /* -------------------------------------------------------------- */
 
 void CopyGeometryToBuffer(Data *data)
@@ -89,6 +91,7 @@ void display( void )
 	CopyGeometryToBuffer(myCurrentData);
 	initGPUBuffers();
 	myCurrentData->SetupShader();
+	myCurrentData->ResizeImage(currentWidth, currentHeight);
 	myCurrentData->DrawImage();
 }
 
@@ -156,7 +159,8 @@ void keyboard( unsigned char key, int x, int y )
 // width and height are in pixels
 void reshape(int width, int height)
 {
-	myCurrentData->ResizeImage(width, height);
+	currentWidth = width;
+	currentHeight = height;
 }
 
 /* -------------------------------------------------------------- */
@@ -165,7 +169,7 @@ void InitWindow(int argc, char **argv)
 {
 	glutInit(&argc, argv);                       // intialize GLUT  
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // single framebuffer, colors in RGB
-	glutInitWindowSize(640, 480);                // Window size: 640 wide X 480 high
+	glutInitWindowSize(currentWidth, currentHeight);                // Window size: 640 wide X 480 high
 	glutInitWindowPosition(100, 150);               // Top left corner at (100, 150)
 	glutCreateWindow("Starting App");            // Create Window
 
