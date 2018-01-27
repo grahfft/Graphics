@@ -5,6 +5,7 @@ void DatFile::GenerateGeometry()
 {
 	if (this->points.size() <= 0)
 	{
+		this->points = vector<point2>();
 		ifstream inFile;
 		string fileLocation = "..\\HomegrownFiles\\" + filename;
 
@@ -48,46 +49,49 @@ void DatFile::GenerateGeometry()
 				The list of polylines: each starts with the number of points in the polyline, followed by the (x, y) pairs for each point. - add first value to pointsPerLine, create point out of subsequent lines
 		
 			*/
+			cout << "Parsing Tokens" << endl;
 			int pplAttribute;
+			float x;
+			float y;
 			int numberOfTokens = tokens.size();
 
 			switch (numberOfTokens)
 			{
 			case 1:
+				cout << "Adding a new line" << endl;
 				pplAttribute = stoi(tokens[0]);
 
-				if (pointsPerLine.size() == 0)
+				if (!totalLines)
 				{
 					totalLines = pplAttribute;
-					pointsPerLine = vector<int>(pplAttribute);
+					pointsPerLine = vector<int>();
 				}
 				else {
 					pointsPerLine.push_back(pplAttribute);
 				}
 				break;
+			case 2:
+				cout << "X: " << tokens[0] << " Y: " << tokens[1] << endl;
+				x = stof(tokens[0]);
+				y = stof(tokens[1]);
+				
+				this->points.push_back(point2(x, y));
+				break;
 			case 4:
-				this->left = stoi(tokens[0]);
-				this->top = stoi(tokens[1]);
-				this->right = stoi(tokens[2]);
-				this->bottom = stoi(tokens[3]);
+				this->left = stof(tokens[0]);
+				this->top = stof(tokens[1]);
+				this->right = stof(tokens[2]);
+				this->bottom = stof(tokens[3]);
 
 				cout << "Left: " << this->left << " Top: " << this->top << " Right: " << this->right << " Bottom: " << this->bottom << endl;
 				break;
 			default:
-				//cout << "ERROR!!!! Shouldn't get here" << endl;
+				cout << "ERROR!!!! Shouldn't get here" << endl;
 				break;
 			}
-
-			
-
-			/*for (int index = 0; index < pointsPerLine.size(); index++)
-			{
-				cout << "Points Per Line: " + to_string(pointsPerLine[index]) << endl;
-			}*/
 		}
 
-		cout << "Expected Size of PPL: " << totalLines << " Size of Points Per Line: " << this->pointsPerLine.size() << endl;
-
+		cout << "closing the file" << endl;
 		inFile.close();
 	}
 }

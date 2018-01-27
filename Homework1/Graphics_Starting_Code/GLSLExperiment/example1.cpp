@@ -33,7 +33,7 @@ void keyboard( unsigned char key, int x, int y );
 using namespace std;
 
 // Array for polyline
-point2 points[10000];
+point2 points[15000];
 GLuint program;
 
 // Images
