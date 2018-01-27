@@ -6,6 +6,7 @@
 
 #endif // !__DATA__
 
+/* Interface for generating the Sierpinski Gasket */
 class Sierpinski :
 	public Data
 {

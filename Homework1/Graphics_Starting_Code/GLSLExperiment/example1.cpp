@@ -12,10 +12,6 @@
 
 #endif // !__DATA__
 
-
-// Number of points in polyline
-int NumPoints = 0;
-
 // General Functions
 void initGPUBuffers( void );
 void CopyGeometryToBuffer(Data *data);
@@ -25,7 +21,7 @@ void InitWindow(int argc, char **argv);
 void InitCallbacks(void);
 void InitShader(void);
 
-// Callbacks
+/*  Callbacks */
 void display( void );
 void keyboard( unsigned char key, int x, int y );
 void reshape(int width, int height);
@@ -43,6 +39,8 @@ DatFile *vinci;
 
 // Current Image Data
 Data *myCurrentData;
+
+// Current Window size in pixels
 float currentWidth = 640;
 float currentHeight = 480;
 /* -------------------------------------------------------------- */
@@ -50,11 +48,10 @@ float currentHeight = 480;
 void CopyGeometryToBuffer(Data *data)
 {
 	data->GenerateGeometry();
-	NumPoints = data->points.size();
 
 	for (int index = 0; index < MAXPOINTS; index++)
 	{
-		if (index < NumPoints)
+		if (index < data->points.size())
 		{
 			points[index] = data->points[index];
 		}

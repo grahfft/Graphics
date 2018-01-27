@@ -21,6 +21,7 @@ using namespace std;
 
 #endif // !__ANGEL__
 
+/* Generic interface for Image Data */
 class Data
 {
 public:

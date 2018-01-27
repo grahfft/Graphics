@@ -1,5 +1,6 @@
 #include "Triangle.h"
 
+/* Generates the triangles geometry */
 void Triangle::GenerateGeometry()
 {
 	this->left = -1.0;
@@ -17,7 +18,7 @@ void Triangle::GenerateGeometry()
 	}
 }
 
-
+/* Draws a 6 x 6 tiling of triangles */
 void Triangle::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window

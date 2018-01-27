@@ -6,6 +6,9 @@
 
 #endif // !__DATA__
 
+/*
+Interface for loading a homegrown dat file
+*/
 class DatFile :
 	public Data
 {

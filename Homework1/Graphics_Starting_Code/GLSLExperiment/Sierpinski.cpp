@@ -1,5 +1,6 @@
 #include "Sierpinski.h"
 
+/* Generates the geometry for the Sierpinski Gasket; Regenerates every time it's called */
 void Sierpinski::GenerateGeometry()
 {
 	this->left = -2.0;
@@ -23,6 +24,7 @@ void Sierpinski::GenerateGeometry()
 	}
 }
 
+/* Draws all determined points as Points on the screen */
 void Sierpinski::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window

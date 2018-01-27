@@ -7,6 +7,7 @@
 
 #endif // !__DATA__
 
+/* Interfaced for generating a triangle */
 class Triangle :
 	public Data
 {

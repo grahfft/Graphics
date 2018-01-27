@@ -1,6 +1,6 @@
 #include "DatFile.h"
 
-
+/* Generates Dat File Geometry by loading in the file and parsing it */
 void DatFile::GenerateGeometry()
 {
 	if (this->points.size() <= 0)
@@ -91,6 +91,7 @@ void DatFile::GenerateGeometry()
 	}
 }
 
+/* Draws the image of a dat file by doing a 4 x 4 tiling of it */
 void DatFile::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
