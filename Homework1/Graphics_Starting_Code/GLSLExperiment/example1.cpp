@@ -43,7 +43,7 @@ Snowflake *snowflake;
 Data *myCurrentData;
 
 // Current Koch Snowflake iteration
-int iteration = 1;
+int iteration = 3;
 
 // Current Window size in pixels
 float currentWidth = 640;
