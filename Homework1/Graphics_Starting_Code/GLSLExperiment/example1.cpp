@@ -19,7 +19,6 @@ int NumPoints = 0;
 // General Functions
 void initGPUBuffers( void );
 void CopyGeometryToBuffer(Data *data);
-void GenerateImage(Data *data);
 
 // Initialization prototypes
 void InitWindow(int argc, char **argv);
@@ -30,10 +29,8 @@ void InitShader(void);
 void display( void );
 void keyboard( unsigned char key, int x, int y );
 
-using namespace std;
-
 // Array for polyline
-point2 points[15000];
+point2 points[MAXPOINTS];
 GLuint program;
 
 // Images
@@ -42,24 +39,26 @@ Sierpinski *gasket;
 DatFile *usa;
 DatFile *dragon;
 DatFile *vinci;
-/* -------------------------------------------------------------- */
 
-void GenerateImage(Data *data) 
-{
-	CopyGeometryToBuffer(data);
-	initGPUBuffers();
-	data->SetupShader();
-	data->DrawImage();
-}
+// Current Image Data
+Data *myCurrentData;
+/* -------------------------------------------------------------- */
 
 void CopyGeometryToBuffer(Data *data)
 {
 	data->GenerateGeometry();
 	NumPoints = data->points.size();
 
-	for (int index = 0; index < NumPoints; index++)
+	for (int index = 0; index < MAXPOINTS; index++)
 	{
-		points[index] = data->points[index];
+		if (index < NumPoints)
+		{
+			points[index] = data->points[index];
+		}
+		else
+		{
+			points[index] = 0;
+		}
 	}
 }
 
@@ -77,19 +76,24 @@ void initGPUBuffers( void )
     glBufferData( GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW );
 }
 
+/* -------------------------------------------------------------- */
+
 void display( void )
 {
 	// All drawing happens in display function
-    glClear( GL_COLOR_BUFFER_BIT );                // clear window
-    glDrawArrays( GL_LINE_LOOP, 0, NumPoints );    // draw the points
-    glFlush();										// force output to graphics hardware
+    //glClear( GL_COLOR_BUFFER_BIT );                // clear window
+    //glDrawArrays( GL_LINE_LOOP, 0, NumPoints );    // draw the points
+    //glFlush();										// force output to graphics hardware
+	
+	CopyGeometryToBuffer(myCurrentData);
+	initGPUBuffers();
+	myCurrentData->SetupShader();
+	myCurrentData->DrawImage();
 }
 
 void keyboard( unsigned char key, int x, int y )
 {
 	// keyboard handler
-	Data *data;
-
     switch ( key ) {
 	case 's':
 		/*
@@ -103,10 +107,10 @@ void keyboard( unsigned char key, int x, int y )
 		if (!gasket)
 		{
 			gasket = new Sierpinski(program);
-
 		}
 
-		GenerateImage(gasket);
+		myCurrentData = gasket;
+
 		break;
 	case 't':
 		if (!triangle)
@@ -114,40 +118,46 @@ void keyboard( unsigned char key, int x, int y )
 			triangle = new Triangle(program);
 		}
 		
-		GenerateImage(triangle);
+		myCurrentData = triangle;
 		break;
 	case 'u':
-		//TODO Generate USA file
 		if (!usa)
 		{
 			usa = new DatFile(program, "usa.dat");
 		}
 
-		GenerateImage(usa);
+		myCurrentData = usa;
 		break;
 	case 'd':
-		//TODO Generate dragon file
 		if (!dragon)
 		{
 			dragon = new DatFile(program, "dragon.dat");
 		}
 
-		GenerateImage(dragon);
+		myCurrentData = dragon;
 		break;
 	case 'v':
-		//TODO Generate Vinci file
 		if (!vinci)
 		{
 			vinci = new DatFile(program, "vinci.dat");
 		}
 
-		GenerateImage(vinci);
+		myCurrentData = vinci;
 		break;
     case 033:			// 033 is Escape key octal value
         exit(1);		// quit program
         break;
     }
+
+	display();
 }
+
+void reshape()
+{
+
+}
+
+/* -------------------------------------------------------------- */
 
 void InitWindow(int argc, char **argv)
 {
@@ -173,7 +183,10 @@ void InitCallbacks(void)
 {
 	glutDisplayFunc(display);                    // Register display callback function
 	glutKeyboardFunc(keyboard);                  // Register keyboard callback function
+
 }
+
+/* -------------------------------------------------------------- */
 
 int main( int argc, char **argv )
 {
@@ -186,7 +199,7 @@ int main( int argc, char **argv )
 	{
 		triangle = new Triangle(program);
 	}
-	GenerateImage(triangle);
+	myCurrentData = triangle;
 
 	// Can add minimalist menus here
 	// add mouse handler

@@ -19,7 +19,6 @@ public:
 	~DatFile() {};
 
 	void GenerateGeometry();
-	void SetupShader();
 	void DrawImage();
 
 	vector<int> pointsPerLine;

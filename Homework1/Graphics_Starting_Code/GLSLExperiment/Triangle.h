@@ -15,7 +15,6 @@ public:
 	virtual ~Triangle() {};
 
 	void GenerateGeometry();
-	void SetupShader();
 	void DrawImage();
 };
 

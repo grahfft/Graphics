@@ -1,4 +1,3 @@
-﻿  DatFile.cpp
-c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(16): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\datfile.cpp(117): warning C4018: '<': signed/unsigned mismatch
+﻿  Sierpinski.cpp
+c:\users\denni\documents\graphics\homework1\graphics_starting_code\glslexperiment\sierpinski.cpp(19): warning C4018: '<': signed/unsigned mismatch
   GLSLExperiment.vcxproj -> C:\Users\denni\Documents\Graphics\Homework1\Graphics_Starting_Code\Debug\GLSLExperiment.exe

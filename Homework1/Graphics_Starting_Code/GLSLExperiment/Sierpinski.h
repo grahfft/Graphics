@@ -14,7 +14,6 @@ public:
 	~Sierpinski() {};
 
 	void GenerateGeometry();
-	void SetupShader();
 	void DrawImage();
 };
 

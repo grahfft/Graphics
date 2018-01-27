@@ -49,7 +49,6 @@ void DatFile::GenerateGeometry()
 				The list of polylines: each starts with the number of points in the polyline, followed by the (x, y) pairs for each point. - add first value to pointsPerLine, create point out of subsequent lines
 		
 			*/
-			cout << "Parsing Tokens" << endl;
 			int pplAttribute;
 			float x;
 			float y;
@@ -58,7 +57,6 @@ void DatFile::GenerateGeometry()
 			switch (numberOfTokens)
 			{
 			case 1:
-				cout << "Adding a new line" << endl;
 				pplAttribute = stoi(tokens[0]);
 
 				if (!totalLines)
@@ -71,7 +69,6 @@ void DatFile::GenerateGeometry()
 				}
 				break;
 			case 2:
-				cout << "X: " << tokens[0] << " Y: " << tokens[1] << endl;
 				x = stof(tokens[0]);
 				y = stof(tokens[1]);
 				
@@ -83,29 +80,15 @@ void DatFile::GenerateGeometry()
 				this->right = stof(tokens[2]);
 				this->bottom = stof(tokens[3]);
 
-				cout << "Left: " << this->left << " Top: " << this->top << " Right: " << this->right << " Bottom: " << this->bottom << endl;
 				break;
 			default:
-				cout << "ERROR!!!! Shouldn't get here" << endl;
+				cout << "ERROR!!!! Shouldn't get here, token size: " << tokens.size() << endl;
 				break;
 			}
 		}
 
-		cout << "closing the file" << endl;
 		inFile.close();
 	}
-}
-
-void DatFile::SetupShader() 
-{
-	mat4 ortho = Ortho2D(this->left, this->right, this->bottom, this->top);
-	GLuint ProjLoc = glGetUniformLocation(program, "Proj");
-	glUniformMatrix4fv(ProjLoc, 1, GL_TRUE, ortho);
-
-	// Initialize the vertex position attribute from the vertex shader
-	GLuint loc = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(loc);
-	glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 }
 
 void DatFile::DrawImage()

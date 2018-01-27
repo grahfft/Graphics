@@ -12,7 +12,10 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
+
 typedef vec2 point2;
+
+#define MAXPOINTS 10000
 
 using namespace std;
 
@@ -32,7 +35,7 @@ public:
 	};
 
 	void virtual GenerateGeometry() {};
-	void virtual SetupShader() {};
+	void SetupShader();
 	void virtual DrawImage() {};
 
 	float right, left, bottom, top;
