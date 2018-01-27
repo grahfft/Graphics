@@ -95,14 +95,20 @@ void DatFile::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
 
-	
+	float w, h;
+	w = this->width / 4;
+	h = this->height / 4;
+	for (int k = 0; k<4; k++) {
+		for (int m = 0; m<4; m++) {
+			glViewport(k * w, m * h, w, h);
+			int startPoint = 0;
 
-	int startPoint = 0;
-
-	for (int index = 0; index < this->pointsPerLine.size(); index++)
-	{
-		glDrawArrays(GL_LINE_STRIP, startPoint, pointsPerLine[index]);    // draw the points
-		startPoint = startPoint + pointsPerLine[index];
+			for (int index = 0; index < this->pointsPerLine.size(); index++)
+			{
+				glDrawArrays(GL_LINE_STRIP, startPoint, pointsPerLine[index]);    // draw the points
+				startPoint = startPoint + pointsPerLine[index];
+			}
+		}
 	}
 	
 	glFlush();
