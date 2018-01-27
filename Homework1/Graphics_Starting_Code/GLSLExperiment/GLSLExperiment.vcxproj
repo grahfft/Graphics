@@ -89,6 +89,7 @@
     <ClCompile Include="example1.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="Sierpinski.cpp" />
+    <ClCompile Include="Snowflake.cpp" />
     <ClCompile Include="textfile.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <ClInclude Include="DatFile.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="Sierpinski.h" />
+    <ClInclude Include="Snowflake.h" />
     <ClInclude Include="textfile.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="vec.h" />

@@ -9,6 +9,7 @@
 #include "Triangle.h"
 #include "Sierpinski.h"
 #include "DatFile.h"
+#include "Snowflake.h"
 
 #endif // !__DATA__
 
@@ -36,9 +37,13 @@ Sierpinski *gasket;
 DatFile *usa;
 DatFile *dragon;
 DatFile *vinci;
+Snowflake *snowflake;
 
 // Current Image Data
 Data *myCurrentData;
+
+// Current Koch Snowflake iteration
+int iteration = 1;
 
 // Current Window size in pixels
 float currentWidth = 640;
@@ -144,6 +149,35 @@ void keyboard( unsigned char key, int x, int y )
 		}
 
 		myCurrentData = vinci;
+		break;
+	case 'i':
+		if (!snowflake) 
+		{
+			snowflake = new Snowflake(program);
+		}
+
+		snowflake->SetIteration(++iteration);
+		myCurrentData = snowflake;
+		break;
+	case 'r':
+		if (!snowflake)
+		{
+			snowflake = new Snowflake(program);
+		}
+
+		if (iteration > 0) {
+			snowflake->SetIteration(--iteration);
+		}
+		myCurrentData = snowflake;
+		break;
+	case 'k':
+		if (!snowflake)
+		{
+			snowflake = new Snowflake(program);
+		}
+
+		snowflake->SetIteration(iteration);
+		myCurrentData = snowflake;
 		break;
     case 033:			// 033 is Escape key octal value
         exit(1);		// quit program
