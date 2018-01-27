@@ -1,5 +1,6 @@
 #include "Snowflake.h"
 #include <cmath>
+#include <math.h>
 
 // Computes the bearing in degrees from the point A(a1,a2) to
 // the point B(b1,b2). Note that A and B are given in terms of
@@ -14,6 +15,16 @@ double bearing(double a1, double a2, double b1, double b2) {
 	return RAD2DEG * theta;
 }
 
+float getAngle(point2 start, point2 target) {
+	float angle = radian2degree(atan2(target.y - start.y, target.x - start.x));
+
+	if (angle < 0) {
+		angle += 360;
+	}
+
+	return angle;
+}
+
 void Snowflake::GenerateGeometry()
 {
 	// Leave empty?
@@ -23,22 +34,22 @@ void Snowflake::GenerateGeometry()
 	this->top = 1;
 
 	this->points = vector<point2>();
-	point2 vertex1 = point2(-0.5, 0.0);
-	point2 vertex2 = point2(0.5, 0.0);
-	/*point2 vertex3 = point2(0.5, -0.5);*/
+	point2 vertex1 = point2(-0.5, -0.5);
+	point2 vertex2 = point2(0.0, 0.5);
+	point2 vertex3 = point2(0.5, -0.5);
 
 	int n = this->iteration;
 
-	this->DrawKoch(vertex1, vertex2, n, degree2radian(0));
-	/*this->DrawKoch(vertex2, vertex3, n, degree2radian(bearing(vertex2.x, vertex2.y, vertex3.x, vertex3.y)));
-	this->DrawKoch(vertex3, vertex1, n, degree2radian(bearing(vertex3.x, vertex3.y, vertex1.x, vertex1.y)));*/
+	this->DrawKoch(vertex1, vertex2, n, degree2radian(getAngle(vertex1, vertex2)));
+	this->DrawKoch(vertex2, vertex3, n, degree2radian(getAngle(vertex2, vertex3)));
+	this->DrawKoch(vertex3, vertex1, n, degree2radian(getAngle(vertex3, vertex1)));
 }
 
 void Snowflake::DrawImage()
 {
 	glClear(GL_COLOR_BUFFER_BIT);                // clear window
 	this->ResizeImage(this->width, this->height);
-	glDrawArrays(GL_LINE_LOOP, 0, this->points.size());    // draw the points
+	glDrawArrays(GL_LINE_STRIP, 0, this->points.size());    // draw the points
 	glFlush();
 }
 

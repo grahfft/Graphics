@@ -155,8 +155,10 @@ void keyboard( unsigned char key, int x, int y )
 		{
 			snowflake = new Snowflake(program);
 		}
-
-		snowflake->SetIteration(++iteration);
+		if (iteration < 6)
+		{
+			snowflake->SetIteration(++iteration);
+		}
 		myCurrentData = snowflake;
 		break;
 	case 'r':
@@ -164,7 +166,6 @@ void keyboard( unsigned char key, int x, int y )
 		{
 			snowflake = new Snowflake(program);
 		}
-
 		if (iteration > 0) {
 			snowflake->SetIteration(--iteration);
 		}
@@ -175,7 +176,6 @@ void keyboard( unsigned char key, int x, int y )
 		{
 			snowflake = new Snowflake(program);
 		}
-
 		snowflake->SetIteration(iteration);
 		myCurrentData = snowflake;
 		break;

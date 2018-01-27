@@ -15,7 +15,7 @@
 
 typedef vec2 point2;
 
-#define MAXPOINTS 10000
+#define MAXPOINTS 50000
 #define radian2degree(a) (a * 57.295779513082)
 #define degree2radian(a) (a * 0.017453292519)
 
