@@ -276,6 +276,8 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO: (Draw your wireframe) at a suitable initial position from the viewer. 
 		// Question: Does this mean a reset to color and CTM?
 		// TODO: Currently working but need to set start position and bounding box
+		// After changing x, y or z location, or rotating the wireframe (R key), W resets position and rotation by drawing the wireframe at origin and with no rotation applied. 
+		// W does NOT reset shear and twist effects.
 		currentPolygon = plyManager->GetCurrentPly();
 		clearPriorPolygonState();
 		break;
@@ -305,6 +307,9 @@ void keyboard( unsigned char key, int x, int y )
 		// Camera position remains fixed for this translation and all other translations below. 
 		// The exact amount to move the ply file before redrawing will affect how much and how much your translation is apparent depends on how far you positioned your wireframe from the viewer. 
 		// So, it's left to you as a design choice to pick an appropriate distance to translate the wireframe along the +ve X axis each time the user hits 'X'. 
+
+		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
+		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
 		break;
 
 	case 'x':
@@ -339,6 +344,13 @@ void keyboard( unsigned char key, int x, int y )
 		// In this way, after 43 cycles, all polyline files should have been drawn one by one. On the 44th cycle, go back and display the first PLY file that was drawn. 
 		// Finally, alternate between rotating PLY files clockwise and counter-clockwise. For instance, PLY file 1 should rotate 360 degrees clockwise before loading PLY file 2 which rotates counterclockwise before loading PLY file 3 which rotates clockwise, and so on.
 		// Hint: Use double buffering (glutSwapBuffers( )) to make the rotation smooth. You can continously update the new wireframe positions and redisplay the meshes in the glutIdleFunc function. 
+		//
+		// If the PLY file is translating when the 'R' key is hit, just stop the translation and rotate the PLY file about the Y axis AT THE CURRENT LOCATION.
+		// Do NOT reset the PLY file to origin before applying the rotation.
+		//
+		// The 'R' key is hit once and then the current PLY file is rotated clockwise 360 degrees.After this 360 degree rotation, this current PLY file is erased and the next PLY file is drawn at the same position and then rotated ANTI - CLOCKWISE 360 degrees.
+		// This file is then erased and the next PLY file is drawn and rotated CLOCKWISE 360 degrees, and so on.Essentially, PLY file 1 is rotated clockwise, PLY file 2 is rotated anti - clockwise, PLY file 3 is rotated clockwise, etc.
+		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
 		break;
 
 	case 'c':
@@ -352,6 +364,11 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO: Increment the amount of shearing of the wireframe along the X axis by a small amount. 
 		// Repeatedly hitting the 'h' key should shear the wireframe by a bit more and more. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh. 
+		//
+		// If shearing is applied and you decrease shearing (H key), the shearing should be reduced till a value of 0 (no shearing). 
+		// Trying to reduce shearing further beyond 0 should have no effect. 
+		// The same goes for twist. 
+		// Trying to reduce twist beyond 0 should have no effect.
 		break;
 
 	case 'H':
