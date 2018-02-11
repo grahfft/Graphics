@@ -37,7 +37,10 @@ public:
 	}
 
 private:
-	// Contains all possible colors the vertex can be
+
+	/*
+	* Contains all possible colors the vertex can be
+	*/
 	vector<color4> vertexColors;
 
 	/*

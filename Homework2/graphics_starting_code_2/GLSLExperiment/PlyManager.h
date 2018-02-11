@@ -46,9 +46,21 @@ public:
 	Ply GetPreviousPly();
 
 private:
-	GLuint program; // location of shader program
-	int currentPly = 0; // current polygon index to display
-	vector<Ply> polygons; // List of all displayable polygons
+
+	/*
+	* location of shader program
+	*/
+	GLuint program;
+
+	/*
+	* current polygon index to display
+	*/
+	int currentPly = 0;
+
+	/*
+	* List of all displayable polygons
+	*/
+	vector<Ply> polygons;
 
 	/*
 	* Creates and builds each polygon; if the file loads successfully added to polygon list

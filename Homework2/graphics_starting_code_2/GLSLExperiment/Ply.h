@@ -62,13 +62,36 @@ public:
 	}
 
 private:
-	GLuint program; // program to send shader variables
-	string filename; // ply filename
-	PlyBuilder builder; // Builds polygon from file
-	ColorRandomizer colorRandomizer; // Generates random colors for vertices
 
-	vector<Vertex> vertices; //Vertex list to reference from
-	vector<Face> faces; // face that contain vertices; to draw look up in vertex list
+	/*
+	* Vertex list to reference from 
+	*/
+	vector<Vertex> vertices;
+
+	/*
+	* face that contain vertices; to draw look up in vertex list
+	*/
+	vector<Face> faces;
+
+	/*
+	* program to send shader variables
+	*/
+	GLuint program;
+
+	/*
+	* ply filename
+	*/
+	string filename;
+
+	/*
+	* Builds polygon from file
+	*/
+	PlyBuilder builder;
+
+	/*
+	* Generates random colors for vertices
+	*/
+	ColorRandomizer colorRandomizer;
 };
 
 #endif

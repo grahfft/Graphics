@@ -50,8 +50,15 @@ public:
 	color4 GetColor() { return this->color; }
 
 private:
-	point4 position; // position of vertex
-	color4 color; // color of vertex
+	/* 
+	* position of vertex
+	*/
+	point4 position;
+
+	/*
+	* color of vertex
+	*/
+	color4 color;
 };
 
 #endif

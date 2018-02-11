@@ -57,11 +57,31 @@ public:
 	}
 
 private:
-	bool loaded = false; // Current Loaded state
-	int totalVertices; // Expected number of Vertices
-	int totalFaces; // Expected number of Faces
-	vector<Vertex> vertices; //Vertex list to reference from
-	vector<Face> faces; // face that contain vertices; to draw look up in vertex list
+
+	/*
+	* Current Loaded state
+	*/
+	bool loaded = false;
+
+	/*
+	* Expected number of Vertices; used for validation
+	*/
+	int totalVertices;
+
+	/*
+	* Expected number of Faces; used for validation
+	*/
+	int totalFaces;
+
+	/*
+	* Vertex list to reference from
+	*/
+	vector<Vertex> vertices;
+
+	/*
+	* face that contain vertices; to draw look up in vertex list
+	*/
+	vector<Face> faces;
 
 	/*
 	* Directs to the parse paths for each token size

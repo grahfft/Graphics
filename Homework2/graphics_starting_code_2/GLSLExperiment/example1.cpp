@@ -82,6 +82,20 @@ void renderPolygon(void);
 
 /*
 * Display callback
+
+// SOME RANDOM TIPS
+//========================================================================
+// remember to enable depth buffering when drawing in 3d
+
+// avoid using glTranslatex, glRotatex, push and pop
+// pass your own view matrix to the shader directly
+// refer to the latest OpenGL documentation for implementation details
+
+// Do not set the near and far plane too far appart!
+// depth buffers do not have unlimited resolution
+// surfaces will start to fight as they come nearer to each other
+// if the planes are too far appart (quantization errors :(   )
+
 */
 void display(void);
 
@@ -239,18 +253,6 @@ void renderPolygon()
 
 //Callback Definitions -------------------------------------------------------
 
-// SOME RANDOM TIPS
-//========================================================================
-// remember to enable depth buffering when drawing in 3d
-//
-// avoid using glTranslatex, glRotatex, push and pop
-// pass your own view matrix to the shader directly
-// refer to the latest OpenGL documentation for implementation details
-//
-// Do not set the near and far plane too far appart!
-// depth buffers do not have unlimited resolution
-// surfaces will start to fight as they come nearer to each other
-// if the planes are too far appart (quantization errors :(   )
 void display( void )
 {
 	// clear the window
