@@ -1,17 +1,19 @@
-﻿Build started 3/28/2014 8:52:41 AM.
-     1>Project "C:\temp\deletable\cs4731_D14_program_tests\HW2\Graphics_Starting_Code_2\GLSLExperiment\GLSLExperiment.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
-         Creating "Debug\GLSLExperiment.unsuccessfulbuild" because "AlwaysCreate" was specified.
-       ClCompile:
-         All outputs are up-to-date.
-       Link:
-         All outputs are up-to-date.
-         GLSLExperiment.vcxproj -> C:\temp\deletable\cs4731_D14_program_tests\HW2\Graphics_Starting_Code_2\Debug\GLSLExperiment.exe
-       FinalizeBuildStatus:
-         Deleting file "Debug\GLSLExperiment.unsuccessfulbuild".
-         Touching "Debug\GLSLExperiment.lastbuildstate".
-     1>Done Building Project "C:\temp\deletable\cs4731_D14_program_tests\HW2\Graphics_Starting_Code_2\GLSLExperiment\GLSLExperiment.vcxproj" (build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.07
+﻿  example1.cpp
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\example1.cpp(155): warning C4018: '<': signed/unsigned mismatch
+  PlyManager.cpp
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plymanager.cpp(70): warning C4018: '>=': signed/unsigned mismatch
+  Generating Code...
+  Compiling...
+  PlyBuilder.cpp
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(12): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(114): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(115): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(116): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(135): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(151): warning C4018: '<': signed/unsigned mismatch
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\plybuilder.cpp(171): warning C4018: '<': signed/unsigned mismatch
+  Ply.cpp
+d:\graphics\homework2\graphics_starting_code_2\glslexperiment\ply.cpp(18): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+example1.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  GLSLExperiment.vcxproj -> D:\Graphics\Homework2\graphics_starting_code_2\Debug\GLSLExperiment.exe

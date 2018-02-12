@@ -65,6 +65,8 @@ void setProjectionMatrix(void);
 
 /*
 * Sets the current Model Matrix
+* See Ch 3 Section 11
+* CTM = Projection View Matrix * Model View Matrix * Vertex Position
 */
 void setModelMatrix(void);
 
@@ -104,6 +106,11 @@ void display(void);
 */
 void keyboard(unsigned char key, int x, int y);
 
+/*
+* idle callback
+*/
+void idle();
+
 // Helper ProtoTypes ---------------------------------------------------------
 
 /*
@@ -120,6 +127,11 @@ void initWindow(int argc, char **argv);
 * Initializes polygon manager and loads ply files
 */
 void initPolygons();
+
+/*
+* Maps callbacks to glut functions
+*/
+void initCallbacks();
 
 // Draw Polygon Definitions --------------------------------------------------
 
@@ -169,7 +181,6 @@ void prepareVertexBufferObject()
 
 
 	// Load shaders and use the resulting shader program
-	program = InitShader("vshader1.glsl", "fshader1.glsl");
 	glUseProgram(program);
 	// set up vertex arrays
 	GLuint vPosition = glGetAttribLocation(program, "vPosition");
@@ -208,10 +219,9 @@ void setProjectionMatrix()
 
 void setModelMatrix()
 {
-
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f);
+	modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
 
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -397,6 +407,11 @@ void keyboard( unsigned char key, int x, int y )
 	display();
 }
 
+void idle() 
+{
+
+}
+
 // Helper Definitions --------------------------------------------------------
 
 void clearPriorPolygonState()
@@ -420,10 +435,19 @@ void initWindow(int argc, char **argv)
 
 void initPolygons()
 {
+	program = InitShader("vshader1.glsl", "fshader1.glsl");
 	plyManager = new PlyManager(program);
 	plyManager->LoadPlyFiles();
 	currentPolygon = plyManager->GetCurrentPly();
 	copyPolygonToFrameBuffer();
+}
+
+void initCallbacks()
+{
+	// assign callback handlers
+	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
+	glutIdleFunc(idle);
 }
 
 //entry point ----------------------------------------------------------------
@@ -432,13 +456,10 @@ int main( int argc, char **argv )
 	// initialize GLUT window and polygon manager
 	initWindow(argc, argv);
 	initPolygons();
+	initCallbacks();
 
 	// Added so white background doesn't flicker on start
-	prepareVertexBufferObject(); 
-
-	// assign callback handlers
-    glutDisplayFunc( display );
-    glutKeyboardFunc( keyboard );
+	prepareVertexBufferObject();
 
 	// enter the drawing loop
     glutMainLoop();
