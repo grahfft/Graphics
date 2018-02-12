@@ -54,14 +54,9 @@ void AddVertexAndColor(Vertex vertex);
 void copyPolygonToFrameBuffer(void);
 
 /*
-* Creates the VAO and VBO
+* Creates VBO; Stores vertex data into VBO; sends VBO to the shader
 */
-void createVertexBufferObject();
-
-/*
-* initializes VBOs and VAO
-*/
-void prepareVertexBufferObject(void);
+void sendToShader();
 
 /*
 * Sets the current Projection Matrix
@@ -121,7 +116,7 @@ void idle();
 */
 void reshape(int width, int height);
 
-// Helper ProtoTypes ---------------------------------------------------------
+// Init Helper ProtoTypes -----------------------------------------------------
 
 /*
 * Clears program state in between renderings of different polygons
@@ -153,6 +148,23 @@ void setVertexArray();
 */
 void setColorArray();
 
+// Draw Helper Prototypes ----------------------------------------------------
+
+/*
+* Creates the VAO and VBO
+*/
+void createVertexBufferObject();
+
+/*
+* Sends the points array to the shader
+*/
+void setVertexArray();
+
+/*
+* Sends the Colors array to the shader
+*/
+void setColorArray();
+
 // Draw Polygon Definitions --------------------------------------------------
 
 void AddVertexAndColor(Vertex vertex)
@@ -181,34 +193,6 @@ void copyPolygonToFrameBuffer()
 	}
 
 	NumVertices = pointColorIndex - 1;
-}
-
-void createVertexBufferObject()
-{
-	// Create a vertex array object
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	// Create and initialize a buffer object
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points) + sizeof(colors),
-		NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
-	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors);
-}
-
-void prepareVertexBufferObject()
-{
-	createVertexBufferObject();
-
-	setVertexArray();
-	setColorArray();
-
-	// sets the default color to clear screen
-	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 }
 
 void setProjectionMatrix()
@@ -266,10 +250,20 @@ void drawPolygon()
 	glDisable( GL_DEPTH_TEST ); 
 }
 
+void sendToShader()
+{
+	createVertexBufferObject();
+	setVertexArray();
+	setColorArray();
+
+	// sets the default color to clear screen
+	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
+}
+
 void renderPolygon()
 {
 	copyPolygonToFrameBuffer();
-	prepareVertexBufferObject();
+	sendToShader();
 	setProjectionMatrix();
 	setModelMatrix();
 	drawPolygon();
@@ -431,6 +425,42 @@ void reshape(int width, int height)
 	glViewport(0, 0, width, height);
 }
 
+// Draw Helper Definitions ---------------------------------------------------
+
+void createVertexBufferObject()
+{
+	// Create a vertex array object
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	// Create and initialize a buffer object
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points) + sizeof(colors),
+		NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors);
+}
+
+void setVertexArray()
+{
+	// set up vertex arrays
+	GLuint vPosition = glGetAttribLocation(program, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
+		BUFFER_OFFSET(0));
+}
+
+void setColorArray()
+{
+	GLuint vColor = glGetAttribLocation(program, "vColor");
+	glEnableVertexAttribArray(vColor);
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
+		BUFFER_OFFSET(sizeof(points)));
+}
+
 // Helper Definitions --------------------------------------------------------
 
 void clearPriorPolygonState()
@@ -475,23 +505,6 @@ void initShaders()
 	// Load shaders and use the resulting shader program
 	program = InitShader("vshader1.glsl", "fshader1.glsl");
 	glUseProgram(program);
-}
-
-void setVertexArray()
-{
-	// set up vertex arrays
-	GLuint vPosition = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(0));
-}
-
-void setColorArray() 
-{
-	GLuint vColor = glGetAttribLocation(program, "vColor");
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(sizeof(points)));
 }
 
 //entry point ----------------------------------------------------------------
