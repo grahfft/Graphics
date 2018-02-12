@@ -20,6 +20,9 @@ public:
 	{
 		this->program = program;
 		this->filename = filename;
+		this->vertices = vector<Vertex>();
+		this->faces = vector<Face>();
+		this->transformations = vector<mat4>();
 	}
 
 	/*
@@ -37,12 +40,20 @@ public:
 	*/
 	void UpdateColor(bool toggle);
 
+	/*
+	* Updates the current glut window width and height; sets the viewport
+	*/
 	void UpdateWindow(int width, int height)
 	{
 		this->width = width;
 		this->height = height;
 		glViewport(0, 0, this->width, this->height);
 	}
+
+	/*
+	* Adds a transformation to the model matrix list
+	*/
+	void AddModelTransformation(mat4 transformation);
 
 	/*
 	* Gets all loaded Vertices
@@ -69,12 +80,9 @@ public:
 	}
 
 	/*
-	* Gets the current model view
+	* Calculates the model matrix in a post-multiply manner
 	*/
-	mat4 getModelMatrix()
-	{
-		return this->modelView;
-	}
+	mat4 getModelMatrix();
 
 	/*
 	* Gets the current projection view
@@ -96,9 +104,9 @@ private:
 	int height = 512;
 
 	/*
-	* Current Model View
+	* List of all transformations
 	*/
-	mat4 modelView = Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f);
+	vector<mat4> transformations;
 
 	/*
 	* Current Projection View

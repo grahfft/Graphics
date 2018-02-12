@@ -2,7 +2,6 @@
 
 void PlyManager::LoadPlyFiles()
 {
-	
 	if (false)
 	{
 		this->createPly("airplane.ply");
@@ -64,6 +63,7 @@ Ply PlyManager::GetCurrentPly()
 	vector<Ply> currentPlys = this->polygons;
 	Ply currentPly = currentPlys[current];
 
+	currentPly.LoadGeometry();
 	return currentPly;
 }
 

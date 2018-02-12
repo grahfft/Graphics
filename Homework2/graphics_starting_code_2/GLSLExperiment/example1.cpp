@@ -213,8 +213,8 @@ void setModelMatrix()
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * currentPolygon.getModelMatrix(); // Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
-
+	modelMat = modelMat * currentPolygon.getModelMatrix();
+	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
 	modelMatrixf[1] = modelMat[1][0]; modelMatrixf[5] = modelMat[1][1];
@@ -322,31 +322,51 @@ void keyboard( unsigned char key, int x, int y )
 
 		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
 		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
+		currentPolygon.AddModelTransformation(Angel::RotateX(35.0f));
+		currentPolygon.AddModelTransformation(Angel::RotateY(45.0f));
+		currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
+		// TODO: Toggle key; Translate in the positive X direction
+
 		break;
 
 	case 'x':
 		// TODO: (Translate your wireframe in the -ve X direction) Use the idle function to continuously move your wireframe some units along the -ve X axis. 
 		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
+
+		// TODO: Toggle key; Translate in the negative X direction
+
 		break;
 
 	case 'Y':
 		// TODO: (Translate your wireframe in the +ve Y direction) Use the idle function to continuously move your wireframe some units along the +ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'Y' is left to you as a design choice. 
+
+		// TODO: Toggle key; Translate in the positive Y direction
+
 		break;
 
 	case 'y':
 		// TODO: (Translate your wireframe in the -ve y direction) Use the idle function to continuously move your wireframe some units along the -ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
+
+		// TODO: Toggle key; Translate in the positive Y direction
+
 		break;
 
 	case 'Z':
 		// TODO: (Translate your wireframe in the +ve Z direction) Use the idle function to continuously move your wireframe some units along the +ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
+
+		// TODO: Toggle key; Translate in the positive Z direction
+
 		break;
 
 	case 'z':
 		// TODO: (Translate your wireframe in the -ve Z direction) Use the idle function to continuously move your wireframe some units along the -ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
+
+		// TODO: Toggle key; Translate in the negative Z direction
+
 		break;
 
 	case 'R':
@@ -412,6 +432,8 @@ void keyboard( unsigned char key, int x, int y )
 void idle() 
 {
 
+
+	glutPostRedisplay();
 }
 
 void reshape(int width, int height)
