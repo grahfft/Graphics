@@ -9,12 +9,6 @@
 
 // Program Variables----------------------------------------------------------
 
-// GLUT Window Width
-int width = 512;
-
-// GLUT Window Height
-int height = 512;
-
 // Toggle for random colors
 bool colorToggle = false;
 
@@ -198,7 +192,7 @@ void copyPolygonToFrameBuffer()
 void setProjectionMatrix()
 {
 	// Section for Projection Matrix
-	Angel::mat4 perspectiveMat = Angel::Perspective((GLfloat)45.0, (GLfloat)width / (GLfloat)height, (GLfloat)0.1, (GLfloat) 100.0);
+	Angel::mat4 perspectiveMat = currentPolygon.getProjectionMatrix();// Angel::Perspective((GLfloat)45.0, (GLfloat)width / (GLfloat)height, (GLfloat)0.1, (GLfloat) 100.0);
 
 	float viewMatrixf[16];
 	viewMatrixf[0] = perspectiveMat[0][0]; viewMatrixf[4] = perspectiveMat[0][1];
@@ -219,7 +213,7 @@ void setModelMatrix()
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
+	modelMat = modelMat * currentPolygon.getModelMatrix(); // Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
 
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -422,7 +416,7 @@ void idle()
 
 void reshape(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	currentPolygon.UpdateWindow(width, height);
 }
 
 // Draw Helper Definitions ---------------------------------------------------
@@ -473,7 +467,7 @@ void initWindow(int argc, char **argv)
 	// init glut
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(width, height);
+	glutInitWindowSize(STARTWIDTH, STARTHEIGHT);
 
 	// create window opengl can be incorperated into other packages like wxwidgets, fltoolkit, etc.
 	glutCreateWindow("CS543 Computer Graphics Homework 2");
