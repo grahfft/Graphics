@@ -51,9 +51,19 @@ public:
 	}
 
 	/*
-	* Adds a transformation to the model matrix list
+	* adds translation to x axis
 	*/
-	void AddModelTransformation(mat4 transformation);
+	void AddXaxisTranslation(bool positive, bool negative);
+
+	/*
+	* adds translation to y axis
+	*/
+	void AddYaxisTranslation(bool positive, bool negative);
+
+	/*
+	* adds translation to z axis
+	*/
+	void AddZaxisTranslation(bool positive, bool negative);
 
 	/*
 	* Gets all loaded Vertices

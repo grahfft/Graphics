@@ -18,6 +18,8 @@
 #define STARTWIDTH 512
 #define STARTHEIGHT 512
 
+#define TRANSLATEINCREMENT 0.25f
+
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
 

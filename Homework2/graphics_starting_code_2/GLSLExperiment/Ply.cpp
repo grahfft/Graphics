@@ -28,9 +28,25 @@ void Ply::UpdateColor(bool toggle)
 	}
 }
 
-void Ply::AddModelTransformation(mat4 transformation)
+void Ply::AddXaxisTranslation(bool positive, bool negative)
 {
-	this->transformations.push_back(transformation);
+	if (positive && negative) return;
+	if (positive) this->transformations.push_back(Angel::Translate(TRANSLATEINCREMENT, 0.0, 0.0));
+	if (negative) this->transformations.push_back(Angel::Translate(TRANSLATEINCREMENT * -1, 0.0, 0.0));
+}
+
+void Ply::AddYaxisTranslation(bool positive, bool negative)
+{
+	if (positive && negative) return;
+	if (positive) this->transformations.push_back(Angel::Translate(0.0, TRANSLATEINCREMENT, 0.0));
+	if (negative) this->transformations.push_back(Angel::Translate(0.0, TRANSLATEINCREMENT * -1, 0.0));
+}
+
+void Ply::AddZaxisTranslation(bool positive, bool negative)
+{
+	if (positive && negative) return;
+	if (positive) this->transformations.push_back(Angel::Translate(0.0, 0.0, TRANSLATEINCREMENT));
+	if (negative) this->transformations.push_back(Angel::Translate(0.0, 0.0, TRANSLATEINCREMENT * -1));
 }
 
 /* modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
@@ -46,6 +62,10 @@ post-multiply -> stack LIFO
 modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) ;
 modelMat = modelMat * Angel::RotateY(45.0f);
 modelMat = modelMat * Angel::RotateX(35.0f);
+
+currentPolygon.AddModelTransformation(Angel::RotateX(35.0f));
+currentPolygon.AddModelTransformation(Angel::RotateY(45.0f));
+currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
 
 */
 mat4 Ply::getModelMatrix()

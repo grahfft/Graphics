@@ -12,6 +12,15 @@
 // Toggle for random colors
 bool colorToggle = false;
 
+bool positiveX = false;
+bool negativeX = false;
+
+bool positiveY = false;
+bool negativeY = false;
+
+bool positiveZ = false;
+bool negativeZ = false;
+
 // Index for Vertex Buffer
 int pointColorIndex = 0;
 
@@ -322,11 +331,9 @@ void keyboard( unsigned char key, int x, int y )
 
 		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
 		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
-		currentPolygon.AddModelTransformation(Angel::RotateX(35.0f));
-		currentPolygon.AddModelTransformation(Angel::RotateY(45.0f));
-		currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
-		// TODO: Toggle key; Translate in the positive X direction
 
+		// TODO: Toggle key; Translate in the positive X direction
+		positiveX = !positiveX;
 		break;
 
 	case 'x':
@@ -334,7 +341,7 @@ void keyboard( unsigned char key, int x, int y )
 		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
 
 		// TODO: Toggle key; Translate in the negative X direction
-
+		negativeX = !negativeX;
 		break;
 
 	case 'Y':
@@ -342,7 +349,7 @@ void keyboard( unsigned char key, int x, int y )
 		// The number of units to translate your wireframe each time the user hits 'Y' is left to you as a design choice. 
 
 		// TODO: Toggle key; Translate in the positive Y direction
-
+		positiveY = !positiveY;
 		break;
 
 	case 'y':
@@ -350,7 +357,7 @@ void keyboard( unsigned char key, int x, int y )
 		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
 
 		// TODO: Toggle key; Translate in the positive Y direction
-
+		negativeY = !negativeY;
 		break;
 
 	case 'Z':
@@ -358,7 +365,7 @@ void keyboard( unsigned char key, int x, int y )
 		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
 
 		// TODO: Toggle key; Translate in the positive Z direction
-
+		positiveZ = !positiveZ;
 		break;
 
 	case 'z':
@@ -366,7 +373,7 @@ void keyboard( unsigned char key, int x, int y )
 		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
 
 		// TODO: Toggle key; Translate in the negative Z direction
-
+		negativeZ = !negativeZ;
 		break;
 
 	case 'R':
@@ -431,7 +438,9 @@ void keyboard( unsigned char key, int x, int y )
 
 void idle() 
 {
-
+	currentPolygon.AddXaxisTranslation(positiveX, negativeX);
+	currentPolygon.AddYaxisTranslation(positiveY, negativeY);
+	currentPolygon.AddZaxisTranslation(positiveZ, negativeZ);
 
 	glutPostRedisplay();
 }
@@ -477,11 +486,20 @@ void setColorArray()
 		BUFFER_OFFSET(sizeof(points)));
 }
 
-// Helper Definitions --------------------------------------------------------
+// Init Helper Definitions ---------------------------------------------------
 
 void clearPriorPolygonState()
 {
 	colorToggle = false;
+
+	positiveX = false;
+	negativeX = false;
+
+	positiveY = false;
+	negativeY = false;
+
+	positiveZ = false;
+	negativeZ = false;
 }
 
 void initWindow(int argc, char **argv)
