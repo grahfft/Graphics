@@ -54,6 +54,11 @@ void AddVertexAndColor(Vertex vertex);
 void copyPolygonToFrameBuffer(void);
 
 /*
+* Creates the VAO and VBO
+*/
+void createVertexBufferObject();
+
+/*
 * initializes VBOs and VAO
 */
 void prepareVertexBufferObject(void);
@@ -111,6 +116,11 @@ void keyboard(unsigned char key, int x, int y);
 */
 void idle();
 
+/*
+* reshape callback
+*/
+void reshape(int width, int height);
+
 // Helper ProtoTypes ---------------------------------------------------------
 
 /*
@@ -132,6 +142,16 @@ void initPolygons();
 * Maps callbacks to glut functions
 */
 void initCallbacks();
+
+/*
+* Creates the vPosition array
+*/
+void setVertexArray();
+
+/*
+* Creates and marks the position of the color attribute
+*/
+void setColorArray();
 
 // Draw Polygon Definitions --------------------------------------------------
 
@@ -163,7 +183,7 @@ void copyPolygonToFrameBuffer()
 	NumVertices = pointColorIndex - 1;
 }
 
-void prepareVertexBufferObject()
+void createVertexBufferObject()
 {
 	// Create a vertex array object
 	GLuint vao;
@@ -178,20 +198,14 @@ void prepareVertexBufferObject()
 		NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(points), points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(points), sizeof(colors), colors);
+}
 
+void prepareVertexBufferObject()
+{
+	createVertexBufferObject();
 
-	// Load shaders and use the resulting shader program
-	glUseProgram(program);
-	// set up vertex arrays
-	GLuint vPosition = glGetAttribLocation(program, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(0));
-
-	GLuint vColor = glGetAttribLocation(program, "vColor");
-	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(sizeof(points)));
+	setVertexArray();
+	setColorArray();
 
 	// sets the default color to clear screen
 	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
@@ -412,6 +426,11 @@ void idle()
 
 }
 
+void reshape(int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
 // Helper Definitions --------------------------------------------------------
 
 void clearPriorPolygonState()
@@ -435,7 +454,7 @@ void initWindow(int argc, char **argv)
 
 void initPolygons()
 {
-	program = InitShader("vshader1.glsl", "fshader1.glsl");
+	
 	plyManager = new PlyManager(program);
 	plyManager->LoadPlyFiles();
 	currentPolygon = plyManager->GetCurrentPly();
@@ -448,6 +467,31 @@ void initCallbacks()
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(idle);
+	glutReshapeFunc(reshape);
+}
+
+void initShaders()
+{
+	// Load shaders and use the resulting shader program
+	program = InitShader("vshader1.glsl", "fshader1.glsl");
+	glUseProgram(program);
+}
+
+void setVertexArray()
+{
+	// set up vertex arrays
+	GLuint vPosition = glGetAttribLocation(program, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer(vPosition, 4, GL_FLOAT, GL_FALSE, 0,
+		BUFFER_OFFSET(0));
+}
+
+void setColorArray() 
+{
+	GLuint vColor = glGetAttribLocation(program, "vColor");
+	glEnableVertexAttribArray(vColor);
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0,
+		BUFFER_OFFSET(sizeof(points)));
 }
 
 //entry point ----------------------------------------------------------------
@@ -457,9 +501,12 @@ int main( int argc, char **argv )
 	initWindow(argc, argv);
 	initPolygons();
 	initCallbacks();
+	createVertexBufferObject();
+	initShaders();
 
 	// Added so white background doesn't flicker on start
-	prepareVertexBufferObject();
+	// prepareVertexBufferObject();
+	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
 
 	// enter the drawing loop
     glutMainLoop();

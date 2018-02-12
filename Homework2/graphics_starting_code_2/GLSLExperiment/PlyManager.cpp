@@ -2,7 +2,6 @@
 
 void PlyManager::LoadPlyFiles()
 {
-	this->createPly("cube.ply");
 	
 	if (false)
 	{
@@ -48,9 +47,13 @@ void PlyManager::LoadPlyFiles()
 		this->createPly("turbine.ply");
 		this->createPly("urn2.ply");
 		this->createPly("walkman.ply");		
+		this->createPly("weathervane.ply");
 	}
-
-	this->createPly("weathervane.ply");
+	else
+	{
+		this->createPly("cube.ply");
+		this->createPly("cow.ply");
+	}
 
 	cout << "plyManager loaded up: " << this->polygons.size() << " polygons" << endl;
 }
