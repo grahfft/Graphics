@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Angel.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="CheckError.h" />
     <ClInclude Include="ColorRandomizer.h" />
     <ClInclude Include="Face.h" />

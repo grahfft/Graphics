@@ -5,6 +5,7 @@ bool Ply::LoadGeometry()
 	if (!this->builder.isLoaded())
 	{
 		this->builder.LoadPlyFile(this->filename);
+		this->boundingBox.PopulateBox(this->builder.getVertices());
 	}
 
 	this->vertices = this->builder.getVertices();

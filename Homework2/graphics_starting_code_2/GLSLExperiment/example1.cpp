@@ -391,7 +391,7 @@ void keyboard( unsigned char key, int x, int y )
 		// This file is then erased and the next PLY file is drawn and rotated CLOCKWISE 360 degrees, and so on.Essentially, PLY file 1 is rotated clockwise, PLY file 2 is rotated anti - clockwise, PLY file 3 is rotated clockwise, etc.
 		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
 
-
+		// TODO: Calculate center of meshes; Translate center to origin; push out a Z for now;
 
 		break;
 

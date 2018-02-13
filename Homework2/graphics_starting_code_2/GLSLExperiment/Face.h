@@ -3,7 +3,6 @@
 #ifndef __FACE__
 #define __FACE__
 
-#include "HelperHeader.h"
 #include "Vertex.h"
 
 /*

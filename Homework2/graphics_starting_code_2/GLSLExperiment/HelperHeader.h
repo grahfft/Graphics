@@ -11,6 +11,7 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
+#include <limits.h>
 
 #define MAXPOINTS 50000
 #define MAXCOLOR 50000

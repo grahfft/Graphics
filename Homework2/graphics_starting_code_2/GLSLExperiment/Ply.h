@@ -4,6 +4,7 @@
 #define __PLY__
 
 #include "Face.h"
+#include "BoundingBox.h"
 #include "PlyBuilder.h"
 
 /*
@@ -170,6 +171,11 @@ private:
 	* Generates random colors for vertices
 	*/
 	ColorRandomizer colorRandomizer;
+
+	/*
+	* Image bounding box
+	*/
+	BoundingBox boundingBox;
 
 	/*
 	* Creates Shear Matrix
