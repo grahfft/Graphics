@@ -71,7 +71,7 @@ currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
 */
 mat4 Ply::getModelMatrix()
 {
-	mat4 modelMatrix = Angel::identity() * this->CreateShear();
+	mat4 modelMatrix = Angel::identity() * this->boundingBox.CreateInitiatlPosition() * this->CreateShear();
 	vector<mat4> currentTransforms = this->transformations;
 
 	for (int index = currentTransforms.size() - 1; 0 <= index; --index)

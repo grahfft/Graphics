@@ -47,6 +47,13 @@ class BoundingBox
 			this->Center = point4(centerX, centerY, centerZ, 1.0);
 		}
 
+		mat4 CreateInitiatlPosition()
+		{
+			float distance = 2 * (abs(this->Near) + abs(this->Far));
+
+			return Angel::Translate(this->Center.x, this->Center.y, this->Center.z) * Angel::Translate(0,0, distance * -1) * Angel::Translate(this->Center.x * -1, this->Center.y * -1, this->Center.z * -1);
+		}
+
 		point4 Center = point4(0, 0, 0, 1);
 		float Left = -1.0;
 		float Bottom = -1.0;
