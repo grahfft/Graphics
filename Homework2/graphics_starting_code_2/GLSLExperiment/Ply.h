@@ -98,6 +98,16 @@ public:
 		return this->faces;
 	}
 
+	vector<mat4> getTransformations()
+	{
+		return this->transformations;
+	}
+
+	void setTransformations(vector<mat4> transformations)
+	{
+		this->transformations = transformations;
+	}
+
 	/*
 	* Gets filename
 	*/
@@ -118,6 +128,8 @@ public:
 	{
 		return this->projView;
 	}
+
+	BoundingBox getBoundingBox() { return this->boundingBox; }
 
 private:
 	/*

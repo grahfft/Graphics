@@ -4,6 +4,7 @@
 #define __DATATYPES__
 
 #include "PlyManager.h"
+#include "Showcase.h"
 
 #endif
 
@@ -26,6 +27,9 @@ int pointColorIndex = 0;
 
 // Polygon Manager
 PlyManager *plyManager;
+
+// Showcase
+Showcase showcase;
 
 // Current Polygon to be drawn
 Ply currentPolygon;
@@ -222,7 +226,7 @@ void setModelMatrix()
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * currentPolygon.getModelMatrix();
+	modelMat = modelMat * showcase.Display(currentPolygon);
 	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -392,6 +396,13 @@ void keyboard( unsigned char key, int x, int y )
 		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
 
 		// TODO: Calculate center of meshes; Translate center to origin; push out a Z for now;
+		// TODO: Showcase class will need to maintain current transform for ALL images
+		//		 Showcase class will reverse direction after 360 degrees
+		//		 Showcase class will load next Ply file
+
+		showcase.ToggleShowcase();
+
+
 
 		break;
 
@@ -447,9 +458,12 @@ void keyboard( unsigned char key, int x, int y )
 
 void idle() 
 {
-	currentPolygon.AddXaxisTranslation(positiveX, negativeX);
-	currentPolygon.AddYaxisTranslation(positiveY, negativeY);
-	currentPolygon.AddZaxisTranslation(positiveZ, negativeZ);
+	if (!showcase.ShowcaseOn())
+	{
+		currentPolygon.AddXaxisTranslation(positiveX, negativeX);
+		currentPolygon.AddYaxisTranslation(positiveY, negativeY);
+		currentPolygon.AddZaxisTranslation(positiveZ, negativeZ);
+	}
 
 	glutPostRedisplay();
 }
@@ -527,7 +541,6 @@ void initWindow(int argc, char **argv)
 
 void initPolygons()
 {
-	
 	plyManager = new PlyManager(program);
 	plyManager->LoadPlyFiles();
 	currentPolygon = plyManager->GetCurrentPly();

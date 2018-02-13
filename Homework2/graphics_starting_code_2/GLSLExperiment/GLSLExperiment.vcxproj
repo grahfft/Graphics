@@ -89,6 +89,7 @@
     <ClCompile Include="Ply.cpp" />
     <ClCompile Include="PlyBuilder.cpp" />
     <ClCompile Include="PlyManager.cpp" />
+    <ClCompile Include="Showcase.cpp" />
     <ClCompile Include="textfile.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="Ply.h" />
     <ClInclude Include="PlyBuilder.h" />
     <ClInclude Include="PlyManager.h" />
+    <ClInclude Include="Showcase.h" />
     <ClInclude Include="textfile.h" />
     <ClInclude Include="vec.h" />
     <ClInclude Include="Vertex.h" />

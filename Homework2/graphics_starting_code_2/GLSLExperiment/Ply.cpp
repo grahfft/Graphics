@@ -79,8 +79,6 @@ mat4 Ply::getModelMatrix()
 		modelMatrix = modelMatrix * currentTransforms[index];
 	}
 
-	// modelMatrix = this->CreateShear() * modelMatrix;
-
 	return modelMatrix;
 }
 
