@@ -70,7 +70,7 @@ currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
 */
 mat4 Ply::getModelMatrix()
 {
-	mat4 modelMatrix = Angel::identity();
+	mat4 modelMatrix = Angel::identity() * this->CreateShear();
 	vector<mat4> currentTransforms = this->transformations;
 
 	for (int index = currentTransforms.size() - 1; 0 <= index; --index)
@@ -78,5 +78,20 @@ mat4 Ply::getModelMatrix()
 		modelMatrix = modelMatrix * currentTransforms[index];
 	}
 
+	// modelMatrix = this->CreateShear() * modelMatrix;
+
 	return modelMatrix;
+}
+
+mat4 Ply::CreateShear()
+{
+	mat4 shear;
+	float converted = ConvertDegreesToRadians(this->shearInDegrees);
+
+	float cosX = cos(converted);
+	float sinX = sin(converted);
+
+	shear[0][1] = cosX / sinX;
+
+	return shear;
 }

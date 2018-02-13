@@ -390,6 +390,9 @@ void keyboard( unsigned char key, int x, int y )
 		// The 'R' key is hit once and then the current PLY file is rotated clockwise 360 degrees.After this 360 degree rotation, this current PLY file is erased and the next PLY file is drawn at the same position and then rotated ANTI - CLOCKWISE 360 degrees.
 		// This file is then erased and the next PLY file is drawn and rotated CLOCKWISE 360 degrees, and so on.Essentially, PLY file 1 is rotated clockwise, PLY file 2 is rotated anti - clockwise, PLY file 3 is rotated clockwise, etc.
 		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
+
+
+
 		break;
 
 	case 'c':
@@ -408,12 +411,18 @@ void keyboard( unsigned char key, int x, int y )
 		// Trying to reduce shearing further beyond 0 should have no effect. 
 		// The same goes for twist. 
 		// Trying to reduce twist beyond 0 should have no effect.
+
+		// TODO: increment shear (subtract from angle) 
+		currentPolygon.IncreaseShear();
 		break;
 
 	case 'H':
 		// TODO: Decrease the amount of shearing of the wireframe along the X axis by a small amount. 
 		// Repeatedly hitting the 'H' key should shear the wireframe by a bit less and less. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh.
+
+		// TODO: Decreas angle of shear (add to angle)
+		currentPolygon.DecreaseShear();
 		break;
 
 	case 't':

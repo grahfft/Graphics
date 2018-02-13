@@ -66,6 +66,22 @@ public:
 	void AddZaxisTranslation(bool positive, bool negative);
 
 	/*
+	* Increases the shear by decrementing the angle; prevents a cot(0) which is undefined
+	*/
+	void IncreaseShear() 
+	{
+		this->shearInDegrees = this->shearInDegrees <= 1 ? 1 : shearInDegrees - SHEARINCREMENT;
+	};
+
+	/*
+	* Decreases the shear by incrementing the angle; prevents a cot(180) which is undefined
+	*/
+	void DecreaseShear()
+	{
+		this->shearInDegrees = this->shearInDegrees >= 179 ? 179 : shearInDegrees + SHEARINCREMENT;
+	};
+
+	/*
 	* Gets all loaded Vertices
 	*/
 	vector<Vertex> getVertices()
@@ -106,12 +122,14 @@ private:
 	/*
 	* Current Window width
 	*/
-	int width = 512;
+	int width = STARTWIDTH;
 
 	/*
 	* Current window height
 	*/
-	int height = 512;
+	int height = STARTHEIGHT;
+
+	int shearInDegrees = STARTANGLE;
 
 	/*
 	* List of all transformations
@@ -152,6 +170,11 @@ private:
 	* Generates random colors for vertices
 	*/
 	ColorRandomizer colorRandomizer;
+
+	/*
+	* Creates Shear Matrix
+	*/
+	mat4 CreateShear();
 };
 
 #endif
