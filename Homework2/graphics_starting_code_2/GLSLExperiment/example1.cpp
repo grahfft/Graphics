@@ -464,6 +464,14 @@ void idle()
 		currentPolygon.AddYaxisTranslation(positiveY, negativeY);
 		currentPolygon.AddZaxisTranslation(positiveZ, negativeZ);
 	}
+	else
+	{
+		bool nextPoly = showcase.UpdateShowcase();
+		if (nextPoly)
+		{
+			currentPolygon = plyManager->GetNextPly();
+		}
+	}
 
 	glutPostRedisplay();
 }

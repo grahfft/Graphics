@@ -4,6 +4,7 @@ void PlyManager::LoadPlyFiles()
 {
 	if (false)
 	{
+		this->createPly("cube.ply");
 		this->createPly("airplane.ply");
 		this->createPly("ant.ply");
 		this->createPly("apple.ply");

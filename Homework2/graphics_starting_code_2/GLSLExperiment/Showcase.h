@@ -66,10 +66,35 @@ public:
 		return display;
 	}
 
+	bool UpdateShowcase()
+	{
+		if (this->clockwise)
+		{
+			--this->theta;
+		}
+		else
+		{
+			++this->theta;
+		}
+
+		if (this->theta == 360) {
+			this->clockwise = true;
+			return true;
+		}
+
+		if (this->theta == 0)
+		{
+			this->clockwise = false;
+			return true;
+		}
+
+		return false;
+	}
+
 private:
 	bool grandShowcase;
 
-	bool clockwise;
+	bool clockwise = false;
 
 	vector<mat4> currentTransformations;
 
