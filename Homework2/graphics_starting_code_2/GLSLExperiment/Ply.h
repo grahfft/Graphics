@@ -51,22 +51,6 @@ public:
 	}
 
 	/*
-	* Increases the shear by decrementing the angle; prevents a cot(0) which is undefined
-	*/
-	void IncreaseShear() 
-	{
-		this->shearInDegrees = this->shearInDegrees <= 1 ? 1 : shearInDegrees - SHEARINCREMENT;
-	};
-
-	/*
-	* Decreases the shear by incrementing the angle; prevents a cot(180) which is undefined
-	*/
-	void DecreaseShear()
-	{
-		this->shearInDegrees = this->shearInDegrees >= 179 ? 179 : shearInDegrees + SHEARINCREMENT;
-	};
-
-	/*
 	* Gets all loaded Vertices
 	*/
 	vector<Vertex> getVertices()
@@ -119,8 +103,6 @@ private:
 	*/
 	int height = STARTHEIGHT;
 
-	int shearInDegrees = STARTANGLE;
-
 	/*
 	* Current Projection View
 	*/
@@ -160,11 +142,6 @@ private:
 	* Image bounding box
 	*/
 	BoundingBox boundingBox;
-
-	/*
-	* Creates Shear Matrix
-	*/
-	mat4 CreateShear();
 };
 
 #endif

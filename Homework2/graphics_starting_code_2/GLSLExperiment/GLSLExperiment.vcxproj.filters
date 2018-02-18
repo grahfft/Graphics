@@ -92,5 +92,8 @@
     <ClInclude Include="Translator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shearer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

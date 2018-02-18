@@ -7,6 +7,7 @@
 #include "Showcase.h"
 #include "Twister.h"
 #include "Translator.h"
+#include "Shearer.h"
 
 #endif
 
@@ -38,6 +39,9 @@ Twister twister;
 
 // Translates the current mesh
 Translator translator;
+
+// Shears the current mesh
+Shearer shearer;
 
 // Current Polygon to be drawn
 Ply currentPolygon;
@@ -237,10 +241,9 @@ void setModelMatrix()
 	mat4 translationMatrix = translator.getTranslationMatrix();
 	mat4 showcaseMatrix = showcase.Display(&currentPolygon, translationMatrix);
 	mat4 currentModel = currentPolygon.getModelMatrix();
+	mat4 shearMatrix = shearer.CreateShear();
 
-	modelMat = modelMat * showcaseMatrix;
-	modelMat = modelMat * translationMatrix;
-	modelMat = modelMat * currentModel;
+	modelMat = modelMat * showcaseMatrix * translationMatrix  * currentModel * shearMatrix;
 	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -442,7 +445,9 @@ void keyboard( unsigned char key, int x, int y )
 		// The same goes for twist. 
 		// Trying to reduce twist beyond 0 should have no effect.
 		// TODO: increment shear (subtract from angle) 
-		currentPolygon.IncreaseShear();
+		
+		// currentPolygon.IncreaseShear();
+		shearer.IncreaseShear();
 		break;
 
 	case 'H':
@@ -450,7 +455,9 @@ void keyboard( unsigned char key, int x, int y )
 		// Repeatedly hitting the 'H' key should shear the wireframe by a bit less and less. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh.
 		// TODO: Decreas angle of shear (add to angle)
-		currentPolygon.DecreaseShear();
+		
+		//currentPolygon.DecreaseShear();
+		shearer.DecreaseShear();
 		break;
 
 	case 't':

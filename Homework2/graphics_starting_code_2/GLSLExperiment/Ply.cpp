@@ -49,18 +49,5 @@ currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
 */
 mat4 Ply::getModelMatrix()
 {
-	return Angel::identity() * this->boundingBox.CreateInitiatlPosition() * this->CreateShear();
-}
-
-mat4 Ply::CreateShear()
-{
-	mat4 shear;
-	float converted = ConvertDegreesToRadians(this->shearInDegrees);
-
-	float cosX = cos(converted);
-	float sinX = sin(converted);
-
-	shear[0][1] = cosX / sinX;
-
-	return shear;
+	return Angel::identity() * this->boundingBox.CreateInitiatlPosition();
 }
