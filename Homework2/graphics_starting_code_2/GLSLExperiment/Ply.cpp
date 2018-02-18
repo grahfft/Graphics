@@ -19,7 +19,7 @@ bool Ply::LoadGeometry()
 
 void Ply::UpdateColor(bool toggle)
 {
-	for (unsigned int index = 0; index < this->vertices->size(); index++)
+	for (unsigned int index = 0; index < this->vertices[0].size(); index++)
 	{
 		color4 currentColor = RED;
 		if (toggle)

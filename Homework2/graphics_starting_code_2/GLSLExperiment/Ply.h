@@ -28,7 +28,9 @@ public:
 	/*
 	* Destructor
 	*/
-	~Ply() {};
+	~Ply() 
+	{
+	};
 
 	/*
 	* This method Loads the geomtry from the given ply file
@@ -144,6 +146,8 @@ private:
 	* Image bounding box
 	*/
 	BoundingBox boundingBox;
+
+	bool deleted = false;
 };
 
 #endif

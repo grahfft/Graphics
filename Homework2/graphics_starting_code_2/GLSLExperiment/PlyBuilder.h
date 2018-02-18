@@ -19,7 +19,9 @@ public:
 	/*
 	* Destructor
 	*/
-	~PlyBuilder() {};
+	~PlyBuilder() 
+	{
+	};
 
 	/*
 	* Contains the logic for loading a ply file and parses the file if a valid file
@@ -62,6 +64,8 @@ private:
 	* Current Loaded state
 	*/
 	bool loaded = false;
+	
+	bool deleted = false;
 
 	/*
 	* Expected number of Vertices; used for validation

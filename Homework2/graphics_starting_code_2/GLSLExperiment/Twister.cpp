@@ -3,9 +3,9 @@
 vector<Vertex*> Twister::TwistMesh(Ply *currentPly, mat4 currentModel)
 {
 	int theta = this->baseTheta;
-	if (theta == 0) return *currentPly->getVertices();
-
 	vector<Vertex*> points = *currentPly->getVertices();
+	if (theta == 0) return points;
+
 	vector<Vertex*> newPoints = vector<Vertex*>(points.size());
 
 	BoundingBox box = currentPly->getBoundingBox();
