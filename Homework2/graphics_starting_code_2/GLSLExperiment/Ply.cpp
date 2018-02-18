@@ -29,27 +29,6 @@ void Ply::UpdateColor(bool toggle)
 	}
 }
 
-void Ply::AddXaxisTranslation(bool positive, bool negative)
-{
-	if (positive && negative) return;
-	if (positive) this->transformations.push_back(Angel::Translate(TRANSLATEINCREMENT, 0.0, 0.0));
-	if (negative) this->transformations.push_back(Angel::Translate(TRANSLATEINCREMENT * -1, 0.0, 0.0));
-}
-
-void Ply::AddYaxisTranslation(bool positive, bool negative)
-{
-	if (positive && negative) return;
-	if (positive) this->transformations.push_back(Angel::Translate(0.0, TRANSLATEINCREMENT, 0.0));
-	if (negative) this->transformations.push_back(Angel::Translate(0.0, TRANSLATEINCREMENT * -1, 0.0));
-}
-
-void Ply::AddZaxisTranslation(bool positive, bool negative)
-{
-	if (positive && negative) return;
-	if (positive) this->transformations.push_back(Angel::Translate(0.0, 0.0, TRANSLATEINCREMENT));
-	if (negative) this->transformations.push_back(Angel::Translate(0.0, 0.0, TRANSLATEINCREMENT * -1));
-}
-
 /* modelMat = modelMat * Angel::Translate(0.0, 0.0, -2.0f) * Angel::RotateY(45.0f) * Angel::RotateX(35.0f); // Remember to post multiply
 
 These produce the same result
@@ -71,15 +50,7 @@ currentPolygon.AddModelTransformation(Angel::Translate(0.0, 0.0, -2.0f));
 */
 mat4 Ply::getModelMatrix()
 {
-	mat4 modelMatrix = Angel::identity() * this->boundingBox.CreateInitiatlPosition() * this->CreateShear();
-	vector<mat4> currentTransforms = this->transformations;
-
-	for (int index = currentTransforms.size() - 1; 0 <= index; --index)
-	{
-		modelMatrix = modelMatrix * currentTransforms[index];
-	}
-
-	return modelMatrix;
+	return Angel::identity() * this->boundingBox.CreateInitiatlPosition() * this->CreateShear();
 }
 
 mat4 Ply::CreateShear()

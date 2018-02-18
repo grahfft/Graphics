@@ -6,6 +6,7 @@
 #include "PlyManager.h"
 #include "Showcase.h"
 #include "Twister.h"
+#include "Translator.h"
 
 #endif
 
@@ -32,8 +33,11 @@ PlyManager *plyManager;
 // Showcases polygons based on assignment
 Showcase showcase;
 
-// Twists the mesh
+// Twists the current mesh
 Twister twister;
+
+// Translates the current mesh
+Translator translator;
 
 // Current Polygon to be drawn
 Ply currentPolygon;
@@ -230,8 +234,13 @@ void setModelMatrix()
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * showcase.Display(&currentPolygon);
-	modelMat = modelMat * currentPolygon.getModelMatrix();
+	mat4 translationMatrix = translator.getTranslationMatrix();
+	mat4 showcaseMatrix = showcase.Display(&currentPolygon, translationMatrix);
+	mat4 currentModel = currentPolygon.getModelMatrix();
+
+	modelMat = modelMat * showcaseMatrix;
+	modelMat = modelMat * translationMatrix;
+	modelMat = modelMat * currentModel;
 	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -343,42 +352,48 @@ void keyboard( unsigned char key, int x, int y )
 		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
 		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
 		// TODO: Toggle key; Translate in the positive X direction
-		positiveX = !positiveX;
+
+		translator.TogglePosX();
 		break;
 
 	case 'x':
 		// TODO: (Translate your wireframe in the -ve X direction) Use the idle function to continuously move your wireframe some units along the -ve X axis. 
 		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
 		// TODO: Toggle key; Translate in the negative X direction
-		negativeX = !negativeX;
+
+		translator.ToggleNegX();
 		break;
 
 	case 'Y':
 		// TODO: (Translate your wireframe in the +ve Y direction) Use the idle function to continuously move your wireframe some units along the +ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'Y' is left to you as a design choice. 
 		// TODO: Toggle key; Translate in the positive Y direction
-		positiveY = !positiveY;
+		
+		translator.TogglePosY();
 		break;
 
 	case 'y':
 		// TODO: (Translate your wireframe in the -ve y direction) Use the idle function to continuously move your wireframe some units along the -ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
 		// TODO: Toggle key; Translate in the positive Y direction
-		negativeY = !negativeY;
+
+		translator.ToggleNegY();
 		break;
 
 	case 'Z':
 		// TODO: (Translate your wireframe in the +ve Z direction) Use the idle function to continuously move your wireframe some units along the +ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
 		// TODO: Toggle key; Translate in the positive Z direction
-		positiveZ = !positiveZ;
+
+		translator.TogglePosZ();
 		break;
 
 	case 'z':
 		// TODO: (Translate your wireframe in the -ve Z direction) Use the idle function to continuously move your wireframe some units along the -ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
 		// TODO: Toggle key; Translate in the negative Z direction
-		negativeZ = !negativeZ;
+
+		translator.ToggleNegZ();
 		break;
 
 	case 'R':
@@ -462,9 +477,7 @@ void idle()
 {
 	if (!showcase.ShowcaseOn())
 	{
-		currentPolygon.AddXaxisTranslation(positiveX, negativeX);
-		currentPolygon.AddYaxisTranslation(positiveY, negativeY);
-		currentPolygon.AddZaxisTranslation(positiveZ, negativeZ);
+		translator.AddTranslations();
 	}
 	else
 	{
@@ -526,14 +539,7 @@ void clearPriorPolygonState()
 {
 	colorToggle = false;
 
-	positiveX = false;
-	negativeX = false;
-
-	positiveY = false;
-	negativeY = false;
-
-	positiveZ = false;
-	negativeZ = false;
+	translator.TurnOff();
 }
 
 void initWindow(int argc, char **argv)

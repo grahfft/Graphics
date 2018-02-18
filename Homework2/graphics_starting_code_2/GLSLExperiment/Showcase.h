@@ -51,7 +51,7 @@ public:
 	* If running, provides a rotated matrix
 	* Otherwise returns the identity matrix
 	*/
-	mat4 Display(Ply *currentPolygon);
+	mat4 Display(Ply *currentPolygon, mat4 currentModel);
 
 	/*
 	* Updates the showcase rotation and signals if the current polygon needs updating

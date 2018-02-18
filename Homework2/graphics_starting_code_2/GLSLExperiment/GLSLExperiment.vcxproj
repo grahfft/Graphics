@@ -91,6 +91,7 @@
     <ClCompile Include="PlyManager.cpp" />
     <ClCompile Include="Showcase.cpp" />
     <ClCompile Include="textfile.cpp" />
+    <ClCompile Include="Translator.cpp" />
     <ClCompile Include="Twister.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +107,7 @@
     <ClInclude Include="PlyManager.h" />
     <ClInclude Include="Showcase.h" />
     <ClInclude Include="textfile.h" />
+    <ClInclude Include="Translator.h" />
     <ClInclude Include="Twister.h" />
     <ClInclude Include="vec.h" />
     <ClInclude Include="Vertex.h" />

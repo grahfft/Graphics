@@ -39,6 +39,9 @@
     <ClCompile Include="Twister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Translator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="textfile.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Twister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Translator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
