@@ -58,7 +58,6 @@ public:
 	{
 		this->grandShowcase = false;
 		this->theta = STARTROTATIONANGLE;
-		this->currentImageRotation = Angel::identity();
 	}
 	
 private:
@@ -76,11 +75,6 @@ private:
 	* Angle to rotate the image
 	*/
 	int theta = STARTROTATIONANGLE;
-
-	/*
-	* Maintains the current rotation matrix for the showcase
-	*/
-	mat4 currentImageRotation;
 
 	bool printed = false;
 };

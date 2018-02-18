@@ -8,7 +8,6 @@ void PlyManager::LoadPlyFiles()
 	{
 		cout << "Loading all ply files. This may take some time..." << endl;
 
-		this->createPly("cube.ply");
 		this->createPly("airplane.ply");
 		this->createPly("ant.ply");
 		this->createPly("apple.ply");
@@ -57,7 +56,7 @@ void PlyManager::LoadPlyFiles()
 	{
 		cout << "Loading all dev ply files. This may take some time..." << endl;
 
-		// this->createPly("cube.ply");
+		// this->createPly("cube.ply");	
 		this->createPly("ant.ply");
 		this->createPly("cow.ply");
 		this->createPly("hammerhead.ply");
@@ -67,24 +66,22 @@ void PlyManager::LoadPlyFiles()
 	cout << "plyManager loaded up: " << this->polygons.size() << " polygons" << endl;
 }
 
-Ply PlyManager::GetCurrentPly() 
+Ply* PlyManager::GetCurrentPly() 
 {
-	int current = this->currentPly;
-	vector<Ply> currentPlys = this->polygons;
-	Ply currentPly = currentPlys[current];
+	Ply *currentPly = this->polygons[this->currentPly % this->polygons.size()];
 
-	if (!currentPly.LoadGeometry())
+	if (!currentPly->LoadGeometry())
 	{
-		cout << "ERROR!!! Failed to load geometry for polygon: " << currentPly.getFilename() << endl;
+		cout << "ERROR!!! Failed to load geometry for polygon: " << currentPly->getFilename() << endl;
 	}
 
 	return currentPly;
 }
 
-Ply PlyManager::GetNextPly()
+Ply* PlyManager::GetNextPly()
 {
 	++this->currentPly;
-	if (this->currentPly >= this->polygons.size())
+	if (this->currentPly == INT_MAX)
 	{
 		this->currentPly = 0;
 	}
@@ -92,10 +89,10 @@ Ply PlyManager::GetNextPly()
 	return this->GetCurrentPly();
 }
 
-Ply PlyManager::GetPreviousPly()
+Ply* PlyManager::GetPreviousPly()
 {
 	--this->currentPly;
-	if (this->currentPly < 0)
+	if (this->currentPly == INT_MIN)
 	{
 		this->currentPly = this->polygons.size() - 1;
 	}
@@ -109,7 +106,7 @@ void PlyManager::createPly(string filename)
 
 	if (polygon->LoadGeometry())
 	{
-		this->polygons.push_back(*polygon);
+		this->polygons.push_back(polygon);
 	}
 	else
 	{

@@ -1,17 +1,19 @@
 #include "Twister.h"
 
-vector<Vertex> Twister::TwistMesh(Ply *currentPly)
+vector<Vertex> Twister::TwistMesh(Ply *currentPly, mat4 currentModel)
 {
 	int theta = this->baseTheta;
-	if (theta == 0) return currentPly->getVertices();
+	if (theta == 0) return *currentPly->getVertices();
 
-	vector<Vertex> newPoints = currentPly->getVertices();
+	vector<Vertex> points = *currentPly->getVertices();
+	vector<Vertex> newPoints = vector<Vertex>(points.size());
+
 	BoundingBox box = currentPly->getBoundingBox();
 	float maxDistance = this->getMaxDistanceFromCenter(box);
 
 	for (int index = 0; index < newPoints.size(); ++index)
 	{
-		Vertex v = newPoints[index];
+		Vertex v = points[index];
 		point4 position = v.GetPosition();
 
 		float distance = this->distanceFromCenter(position, box.Center);
@@ -19,7 +21,9 @@ vector<Vertex> Twister::TwistMesh(Ply *currentPly)
 
 		if (position.x < box.Center.x) interval = interval * -1;
 
-		newPoints[index] = this->createTwistedVertex(position, interval);
+		point4 center = currentPly->getModelMatrix() * currentModel * box.Center;
+
+		newPoints[index] = this->createTwistedVertex(position, center, interval);
 		newPoints[index].SetColor(v.GetColor());
 	}
 
@@ -57,10 +61,10 @@ int Twister::determineRotationAngle(float distance, float maxDistance)
 	return interval;
 }
 
-Vertex Twister::createTwistedVertex(point4 vertex, int interval)
+Vertex Twister::createTwistedVertex(point4 vertex, point4 center, int interval)
 {
 	int theta = this->baseTheta;
-	point4 twistedPoint = Angel::RotateX(interval * theta) * vertex;
+	point4 twistedPoint = Angel::Translate(center.x, center.y, center.z) * Angel::RotateX(interval * theta) * Angel::Translate(center.x * -1, center.y * -1, center.z * -1) * vertex; // Angel::RotateX(interval * theta) * vertex;
 
 	return Vertex(twistedPoint);
 }

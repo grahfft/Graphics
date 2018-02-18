@@ -53,17 +53,17 @@ public:
 	/*
 	* Gets all loaded Vertices
 	*/
-	vector<Vertex> getVertices()
+	vector<Vertex>* getVertices()
 	{
-		return this->vertices;
+		return &this->vertices;
 	}
 
 	/*
 	* Gets all loaded Faces
 	*/
-	vector<Face> getFaces()
+	vector<Face>* getFaces()
 	{
-		return this->faces;
+		return &this->faces;
 	}
 
 	/*
@@ -84,7 +84,7 @@ public:
 	*/
 	mat4 getProjectionMatrix()
 	{
-		/*
+		
 		// This breaks rotation why!?
 		float highestValue = abs(this->boundingBox.Left);
 
@@ -93,8 +93,8 @@ public:
 		if (highestValue < abs(this->boundingBox.Far)) highestValue = abs(this->boundingBox.Far);
 
 
-		return Ortho(highestValue * -1, highestValue, this->boundingBox.Bottom, this->boundingBox.Top, 10 * (highestValue * -1), 10 * highestValue);*/
-		return this->projView;
+		// this->projView = Ortho(highestValue * -1, highestValue, this->boundingBox.Bottom, this->boundingBox.Top, 10 * (highestValue * -1), 10 * highestValue);
+		return Angel::Perspective((GLfloat)60.0, (GLfloat)this->width / (GLfloat)this->height, (GLfloat)0.1, (GLfloat) 1000.0);
 	}
 
 	/*
@@ -112,11 +112,6 @@ private:
 	* Current window height
 	*/
 	int height = STARTHEIGHT;
-
-	/*
-	* Current Projection View
-	*/
-	mat4 projView = Angel::Perspective((GLfloat)45.0, (GLfloat)this->width / (GLfloat)this->height, (GLfloat)0.1, (GLfloat) 100.0);
 
 	/*
 	* Vertex list to reference from 

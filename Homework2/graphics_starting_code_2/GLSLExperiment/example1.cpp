@@ -13,6 +13,12 @@
 
 // Program Variables----------------------------------------------------------
 
+// Current Window Width
+int currentWindowWidth = STARTWIDTH;
+
+// Current Window Height
+int currentWindowHeight = STARTHEIGHT;
+
 // Toggle for random colors
 bool colorToggle = false;
 
@@ -23,19 +29,19 @@ int pointColorIndex = 0;
 PlyManager *plyManager;
 
 // Showcases polygons based on assignment
-Showcase showcase;
+Showcase *showcase;
 
 // Twists the current mesh
-Twister twister;
+Twister *twister;
 
 // Translates the current mesh
-Translator translator;
+Translator *translator;
 
 // Shears the current mesh
-Shearer shearer;
+Shearer *shearer;
 
 // Current Polygon to be drawn
-Ply currentPolygon;
+Ply *currentPolygon;
 
 // handle to shader program
 GLuint program;
@@ -61,7 +67,7 @@ void AddVertexAndColor(Vertex vertex);
 /*
 * Populate both buffers
 */
-void copyPolygonToFrameBuffer(void);
+void copyPolygonToFrameBuffer(Ply current);
 
 /*
 * Creates VBO; Stores vertex data into VBO; sends VBO to the shader
@@ -71,14 +77,14 @@ void sendToShader();
 /*
 * Sets the current Projection Matrix
 */
-void setProjectionMatrix(void);
+void setProjectionMatrix(Ply current);
 
 /*
 * Sets the current Model Matrix
 * See Ch 3 Section 11
 * CTM = Projection View Matrix * Model View Matrix * Vertex Position
 */
-void setModelMatrix(void);
+void setModelMatrix(Ply current);
 
 /*
 * Draws the current polygon
@@ -127,16 +133,6 @@ void idle();
 void reshape(int width, int height);
 
 // Init Helper ProtoTypes -----------------------------------------------------
-
-/*
-* Clears program state in between renderings of different polygons
-*/
-void clearPriorPolygonState(void);
-
-/*
-* Clears the current transform state
-*/
-void clearTransformState(void);
 
 /*
 * Initializes GLUT window
@@ -191,12 +187,12 @@ void AddVertexAndColor(Vertex vertex)
 	pointColorIndex++;
 }
 
-void copyPolygonToFrameBuffer()
+void copyPolygonToFrameBuffer(Ply current)
 {
 	// Load Geometry
 	pointColorIndex = 0;
-	vector<Face> faces = currentPolygon.getFaces();
-	vector<Vertex> vertices = twister.TwistMesh(&currentPolygon);
+	vector<Face> faces = *current.getFaces();
+	vector<Vertex> vertices = twister->TwistMesh(&current, translator->getTranslationMatrix());
 
 	// Add vertices and colors from the faces
 	for (int index = 0; index < faces.size(); index++)
@@ -210,10 +206,10 @@ void copyPolygonToFrameBuffer()
 	NumVertices = pointColorIndex - 1;
 }
 
-void setProjectionMatrix()
+void setProjectionMatrix(Ply current)
 {
 	// Section for Projection Matrix
-	Angel::mat4 perspectiveMat = currentPolygon.getProjectionMatrix();// Angel::Perspective((GLfloat)45.0, (GLfloat)width / (GLfloat)height, (GLfloat)0.1, (GLfloat) 100.0);
+	Angel::mat4 perspectiveMat = current.getProjectionMatrix();// Angel::Perspective((GLfloat)45.0, (GLfloat)width / (GLfloat)height, (GLfloat)0.1, (GLfloat) 100.0);
 
 	float viewMatrixf[16];
 	viewMatrixf[0] = perspectiveMat[0][0]; viewMatrixf[4] = perspectiveMat[0][1];
@@ -230,14 +226,14 @@ void setProjectionMatrix()
 	glUniformMatrix4fv(viewMatrix, 1, GL_FALSE, viewMatrixf);
 }
 
-void setModelMatrix()
+void setModelMatrix(Ply current)
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	mat4 translationMatrix = translator.getTranslationMatrix();
-	mat4 showcaseMatrix = showcase.Display(&currentPolygon, translationMatrix);
-	mat4 currentModel = currentPolygon.getModelMatrix();
-	mat4 shearMatrix = shearer.CreateShear();
+	mat4 translationMatrix = translator->getTranslationMatrix();
+	mat4 showcaseMatrix = showcase->Display(&current, translationMatrix);
+	mat4 currentModel = current.getModelMatrix();
+	mat4 shearMatrix = shearer->CreateShear();
 
 	modelMat = modelMat * showcaseMatrix  * currentModel * translationMatrix * shearMatrix;
 	
@@ -282,10 +278,12 @@ void sendToShader()
 
 void renderPolygon()
 {
-	copyPolygonToFrameBuffer();
+	Ply mesh = *currentPolygon;
+
+	copyPolygonToFrameBuffer(mesh);
 	sendToShader();
-	setProjectionMatrix();
-	setModelMatrix();
+	setProjectionMatrix(mesh);
+	setModelMatrix(mesh);
 	drawPolygon();
 }
 
@@ -312,34 +310,52 @@ void keyboard( unsigned char key, int x, int y )
 	{
 	case 'W':
 		// TODO: (Draw your wireframe) at a suitable initial position from the viewer. 
-		// Question: Does this mean a reset to color and CTM?
-		// TODO: Currently working but need to set start position and bounding box
+		// Question: Does this mean a reset to color?
 		// After changing x, y or z location, or rotating the wireframe (R key), W resets position and rotation by drawing the wireframe at origin and with no rotation applied. 
 		// W does NOT reset shear and twist effects.
 		currentPolygon = plyManager->GetCurrentPly();
-		clearTransformState();		
+
+		translator->TurnOff();
+		translator->ResetTranslations();
+		showcase->ResetShowcase();
+
 		break;
 
 	case 'N':
-		// TODO: (Draw next wireframe) Organize the PLY files in a list going from 1-43. 
+		// (Draw next wireframe) Organize the PLY files in a list going from 1-43. 
 		// Hitting N should load and draw the next wireframe model to the current one in your list of PLY files. 
 		// You can hardcode filenames if you want. The PLY files may not all be of the same size. 
 		// So to properly set up the viewing position using LookAt, you may have to calculate the bounding box of the mesh and then set your view distance to a suitable multiple of the bounding box
-		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetNextPly();
-		clearTransformState();
+
+		currentPolygon->UpdateColor(colorToggle);
+		currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
+
+		shearer->ResetShear();
+		showcase->ResetShowcase();
+		translator->TurnOff();
+		twister->ResetTwist();
+
 		break;
 
 	case 'P':
-		// TODO: (Draw previous wireframe) Organize the PLY files in a list going from 1-43. 
+		// (Draw previous wireframe) Organize the PLY files in a list going from 1-43. 
 		// Hitting P should load and draw the previous wireframe model to the current one in your list of PLY files. 
-		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetPreviousPly();	
-		clearTransformState();
+		
+		currentPolygon->UpdateColor(colorToggle);
+		currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
+
+		shearer->ResetShear();
+		showcase->ResetShowcase();
+		translator->TurnOff();
+		twister->ResetTwist();
+
 		break;
 
 	case 'X':
-		// TODO: (Translate your wireframe in the +ve X direction) Continously move your wireframe some small units along the +ve X axis and redraw it. 
+
+		// (Translate your wireframe in the +ve X direction) Continously move your wireframe some small units along the +ve X axis and redraw it. 
 		// Use the idle function to animate this. The ply file should continue to slide along the +ve X axis till the user hits 'X' again. 
 		// Essentially, the 'X' key acts as a toggle key. If the ply file is stationary and the user hits the 'X' key, the ply file should continue to slide along the +ve X axis until the user hits 'X' again. 
 		// Camera position remains fixed for this translation and all other translations below. 
@@ -347,53 +363,48 @@ void keyboard( unsigned char key, int x, int y )
 		// So, it's left to you as a design choice to pick an appropriate distance to translate the wireframe along the +ve X axis each time the user hits 'X'. 
 		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
 		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
-		// TODO: Toggle key; Translate in the positive X direction
-
-		translator.TogglePosX();
+		translator->TogglePosX();
 		break;
 
 	case 'x':
-		// TODO: (Translate your wireframe in the -ve X direction) Use the idle function to continuously move your wireframe some units along the -ve X axis. 
-		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
-		// TODO: Toggle key; Translate in the negative X direction
 
-		translator.ToggleNegX();
+		// (Translate your wireframe in the -ve X direction) Use the idle function to continuously move your wireframe some units along the -ve X axis. 
+		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
+		translator->ToggleNegX();
 		break;
 
 	case 'Y':
-		// TODO: (Translate your wireframe in the +ve Y direction) Use the idle function to continuously move your wireframe some units along the +ve Y axis. 
+
+		// (Translate your wireframe in the +ve Y direction) Use the idle function to continuously move your wireframe some units along the +ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'Y' is left to you as a design choice. 
-		// TODO: Toggle key; Translate in the positive Y direction
-		
-		translator.TogglePosY();
+		// Toggle key; Translate in the positive Y direction	
+		translator->TogglePosY();
 		break;
 
 	case 'y':
-		// TODO: (Translate your wireframe in the -ve y direction) Use the idle function to continuously move your wireframe some units along the -ve Y axis. 
-		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
-		// TODO: Toggle key; Translate in the positive Y direction
 
-		translator.ToggleNegY();
+		// (Translate your wireframe in the -ve y direction) Use the idle function to continuously move your wireframe some units along the -ve Y axis. 
+		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
+		translator->ToggleNegY();
 		break;
 
 	case 'Z':
-		// TODO: (Translate your wireframe in the +ve Z direction) Use the idle function to continuously move your wireframe some units along the +ve Z axis. 
-		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
-		// TODO: Toggle key; Translate in the positive Z direction
 
-		translator.TogglePosZ();
+		// (Translate your wireframe in the +ve Z direction) Use the idle function to continuously move your wireframe some units along the +ve Z axis. 
+		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
+		translator->TogglePosZ();
 		break;
 
 	case 'z':
-		// TODO: (Translate your wireframe in the -ve Z direction) Use the idle function to continuously move your wireframe some units along the -ve Z axis. 
-		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
-		// TODO: Toggle key; Translate in the negative Z direction
 
-		translator.ToggleNegZ();
+		// (Translate your wireframe in the -ve Z direction) Use the idle function to continuously move your wireframe some units along the -ve Z axis. 
+		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
+		translator->ToggleNegZ();
 		break;
 
 	case 'R':
-		// TODO: (Rotate your wireframe about it's CURRENT position) Just like in a showroom where the wireframe is on a swivel, rotate your wireframe smoothly 360 degrees at a moderate speed about its CURRENT position (not about the center of the scene) 
+
+		// (Rotate your wireframe about it's CURRENT position) Just like in a showroom where the wireframe is on a swivel, rotate your wireframe smoothly 360 degrees at a moderate speed about its CURRENT position (not about the center of the scene) 
 		// This rotation is NOT the same as moving the wireframe in a wide arc. The rotation should be about the Y axis and the wireframe should not translate while rotating. 
 		// After each 360 degree rotation of the "current" PLY file, load and display the "next" (of the 43 PLY) files. 
 		// In this way, after 43 cycles, all polyline files should have been drawn one by one. On the 44th cycle, go back and display the first PLY file that was drawn. 
@@ -406,59 +417,56 @@ void keyboard( unsigned char key, int x, int y )
 		// The 'R' key is hit once and then the current PLY file is rotated clockwise 360 degrees.After this 360 degree rotation, this current PLY file is erased and the next PLY file is drawn at the same position and then rotated ANTI - CLOCKWISE 360 degrees.
 		// This file is then erased and the next PLY file is drawn and rotated CLOCKWISE 360 degrees, and so on.Essentially, PLY file 1 is rotated clockwise, PLY file 2 is rotated anti - clockwise, PLY file 3 is rotated clockwise, etc.
 		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
-		// TODO: Calculate center of meshes; Translate center to origin; push out a Z for now;
-		// TODO: Showcase class will need to maintain current transform for ALL images
-		//		 Showcase class will reverse direction after 360 degrees
-		//		 Showcase class will load next Ply file
-
-		showcase.ToggleShowcase();
-		if (!showcase.ShowcaseOn())
+		showcase->ToggleShowcase();
+		if (!showcase->ShowcaseOn())
 		{
-			translator.TurnOff();
+			translator->TurnOff();
 		}
 		break;
 
 	case 'c':
+
 		// Toggle defaulted to off on start
 		// Toggle resets between renderings
 		colorToggle = !colorToggle;
-		currentPolygon.UpdateColor(colorToggle);	
+		currentPolygon->UpdateColor(colorToggle);	
 		break;
 
 	case 'h':
-		// TODO: Increment the amount of shearing of the wireframe along the X axis by a small amount. 
+
+		// Increment the amount of shearing of the wireframe along the X axis by a small amount. 
 		// Repeatedly hitting the 'h' key should shear the wireframe by a bit more and more. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh. 
 		//
 		// If shearing is applied and you decrease shearing (H key), the shearing should be reduced till a value of 0 (no shearing). 
 		// Trying to reduce shearing further beyond 0 should have no effect. 
 		// The same goes for twist. 
-		// Trying to reduce twist beyond 0 should have no effect.
-		// TODO: increment shear (subtract from angle) 		
-		shearer.IncreaseShear();
+		// Trying to reduce twist beyond 0 should have no effect.		
+		shearer->IncreaseShear();
 		break;
 
 	case 'H':
-		// TODO: Decrease the amount of shearing of the wireframe along the X axis by a small amount. 
+
+		// Decrease the amount of shearing of the wireframe along the X axis by a small amount. 
 		// Repeatedly hitting the 'H' key should shear the wireframe by a bit less and less. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh.
-		// TODO: Decreas angle of shear (add to angle)
-		shearer.DecreaseShear();
+		shearer->DecreaseShear();
 		break;
 
 	case 't':
-		// TODO:  Increment the amount of twisting of the wireframe around the Y axis by a small amount. 
+
+		// Increment the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 't' key should twist the wireframe by a bit more and more. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
-		twister.IncrementTwist();
+		twister->IncrementTwist();
 		break;
 
 	case 'T':
-		//TODO: Decrease the amount of twisting of the wireframe around the Y axis by a small amount. 
+
+		// Decrease the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 'T' key should twist the wireframe by a bit less and less. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
-		// The further from the center each point is; increase the rotation of the point
-		twister.DecrementTwist();
+		twister->DecrementTwist();
 		break;
 
     case 033:
@@ -471,12 +479,12 @@ void keyboard( unsigned char key, int x, int y )
 
 void idle() 
 {
-	translator.AddTranslations(showcase.ShowcaseOn());
+	translator->AddTranslations(showcase->ShowcaseOn());
 
-	if (showcase.UpdateShowcase())
+	if (showcase->UpdateShowcase())
 	{
 		currentPolygon = plyManager->GetNextPly();
-		currentPolygon.UpdateColor(colorToggle);
+		currentPolygon->UpdateColor(colorToggle);
 	}
 
 	glutPostRedisplay();
@@ -484,7 +492,10 @@ void idle()
 
 void reshape(int width, int height)
 {
-	currentPolygon.UpdateWindow(width, height);
+	currentWindowWidth = width;
+	currentWindowHeight = height;
+
+	currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
 }
 
 // Draw Helper Definitions ---------------------------------------------------
@@ -525,28 +536,12 @@ void setColorArray()
 
 // Init Helper Definitions ---------------------------------------------------
 
-void clearPriorPolygonState()
-{
-	colorToggle = false;
-
-	translator.TurnOff();
-}
-
-void clearTransformState()
-{
-	clearPriorPolygonState();
-	showcase.ResetShowcase();
-	translator.ResetTranslations();
-	shearer.ResetShear();
-	twister.ResetTwist();
-}
-
 void initWindow(int argc, char **argv)
 {
 	// init glut
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(STARTWIDTH, STARTHEIGHT);
+	glutInitWindowSize(currentWindowWidth, currentWindowHeight);
 
 	// create window opengl can be incorperated into other packages like wxwidgets, fltoolkit, etc.
 	glutCreateWindow("CS543 Computer Graphics Homework 2");
@@ -555,12 +550,23 @@ void initWindow(int argc, char **argv)
 	glewInit();
 }
 
+void initTransformers()
+{
+	shearer = new Shearer();
+	showcase = new Showcase();
+	translator = new Translator();
+	twister = new Twister();
+}
+
 void initPolygons()
 {
 	plyManager = new PlyManager(program);
 	plyManager->LoadPlyFiles();
+
 	currentPolygon = plyManager->GetCurrentPly();
-	copyPolygonToFrameBuffer();
+	currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
+
+	copyPolygonToFrameBuffer(*currentPolygon);
 }
 
 void initCallbacks()
@@ -584,6 +590,7 @@ int main( int argc, char **argv )
 {
 	// initialize GLUT window and polygon manager
 	initWindow(argc, argv);
+	initTransformers();
 	initPolygons();
 	initCallbacks();
 	createVertexBufferObject();

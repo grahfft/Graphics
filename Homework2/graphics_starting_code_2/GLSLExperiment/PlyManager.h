@@ -11,12 +11,13 @@
 class PlyManager
 {
 public:
+
 	/*
 	* Constructors
 	*/
 	PlyManager(GLuint program)
 	{
-		this->polygons = vector<Ply>();
+		this->polygons = vector<Ply*>();
 	};	
 	PlyManager() {};
 
@@ -33,17 +34,17 @@ public:
 	/*
 	* Gets the current polygon to draw
 	*/
-	Ply GetCurrentPly();
+	Ply* GetCurrentPly();
 
 	/*
 	* Gets the next polygon to draw
 	*/
-	Ply GetNextPly();
+	Ply* GetNextPly();
 
 	/*
 	* Gets the previous polygon to draw
 	*/
-	Ply GetPreviousPly();
+	Ply* GetPreviousPly();
 
 private:
 
@@ -60,7 +61,7 @@ private:
 	/*
 	* List of all displayable polygons
 	*/
-	vector<Ply> polygons;
+	vector<Ply*> polygons;
 
 	/*
 	* Creates and builds each polygon; if the file loads successfully added to polygon list

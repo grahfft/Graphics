@@ -61,13 +61,15 @@ class BoundingBox
 		*/
 		mat4 CreateInitiatlPosition()
 		{
-			float distance = 5 * (abs(this->Near) + abs(this->Far));
+			float distanceZ = (abs(this->Near) + abs(this->Far));
+			float distanceX = (abs(this->Left) + abs(this->Right));
+			float distanceY = (abs(this->Top) + abs(this->Bottom)) * -1;
 
-			/*
-			*  Angel::Translate(this->Center.x, this->Center.y, this->Center.z) * Angel::Translate(0,0, distance * -1)
-			* Currently moves center to 0,0,0
-			*/
-			return Angel::Translate(this->Center.x, this->Center.y, this->Center.z) * Angel::Translate(0,0, distance * -1) * Angel::Translate(this->Center.x * -1, this->Center.y * -1, this->Center.z * -1);
+			float distance = distanceX;
+			if (distance < distanceY) distance = distanceY;
+			if (distance < distanceZ) distance = distanceZ;
+
+			return Angel::Translate(0,0, (distance) * -1) * Angel::Translate(this->Center.x * -1, this->Center.y * -1, this->Center.z * -1);
 		}
 
 		/*

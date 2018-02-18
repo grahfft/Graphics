@@ -27,6 +27,10 @@
 #define TRANSLATEINCREMENT 0.25f
 #define SHEARINCREMENT	1
 
+#define MAXTWISTANGLE	90
+#define MINTWISTANGLE	0
+#define TWISTINCREMENT	1
+
 #define ConvertDegreesToRadians(degrees) (degrees * DegreesToRadians)
 
 typedef Angel::vec4  color4;
