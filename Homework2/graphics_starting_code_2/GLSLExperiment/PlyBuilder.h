@@ -43,17 +43,17 @@ public:
 	/*
 	* Gets all loaded Vertices
 	*/
-	vector<Vertex> getVertices()
+	vector<Vertex*>* getVertices()
 	{
-		return this->vertices;
+		return &this->vertices;
 	}
 
 	/*
 	* Gets all loaded Faces
 	*/
-	vector<Face> getFaces()
+	vector<Face*>* getFaces()
 	{
-		return this->faces;
+		return &this->faces;
 	}
 
 private:
@@ -76,12 +76,12 @@ private:
 	/*
 	* Vertex list to reference from
 	*/
-	vector<Vertex> vertices;
+	vector<Vertex*> vertices;
 
 	/*
 	* face that contain vertices; to draw look up in vertex list
 	*/
-	vector<Face> faces;
+	vector<Face*> faces;
 
 	/*
 	* Directs to the parse paths for each token size
@@ -121,8 +121,8 @@ private:
 		this->loaded = false;
 		this->totalVertices = 0;
 		this->totalFaces = 0;
-		this->vertices = vector<Vertex>(); //Vertex list to reference from
-		this->faces = vector<Face>(); // face that contain vertices; to draw look up in vertex list
+		this->vertices = vector<Vertex*>(); //Vertex list to reference from
+		this->faces = vector<Face*>(); // face that contain vertices; to draw look up in vertex list
 	};
 };
 

@@ -2,6 +2,8 @@
 
 bool PlyBuilder::LoadPlyFile(string filename)
 {
+	if (this->loaded) return true;
+
 	ifstream inFile;
 	string fileLocation = "..\\ply_files\\" + filename;
 
@@ -9,7 +11,7 @@ bool PlyBuilder::LoadPlyFile(string filename)
 
 	if (!inFile)
 	{
-		printf("Failed to open File: %s\n", fileLocation);
+		cout << "Failed to open File: " << fileLocation << endl;
 		this->loaded = false;
 		return this->isLoaded();
 	}
@@ -108,20 +110,20 @@ void PlyBuilder::parseCoordinates(vector<string> tokens)
 	}
 
 	float x, y, z;
-	Vertex v;
+	Vertex* v;
 
 	// if the tokens do not match then it must be a vertices
-	x = atof(tokens[0].c_str());
-	y = atof(tokens[1].c_str());
-	z = atof(tokens[2].c_str());
+	x = (float)atof(tokens[0].c_str());
+	y = (float)atof(tokens[1].c_str());
+	z = (float)atof(tokens[2].c_str());
 
-	v = Vertex(point4(x, y, z, 1.0));
+	v = new Vertex(point4(x, y, z, 1.0));
 	this->vertices.push_back(v);
 }
 
 void PlyBuilder::parseFace(vector<string> tokens)
 {
-	Face face = Face(atoi(tokens[1].c_str()), atoi(tokens[2].c_str()), atoi(tokens[3].c_str()));
+	Face* face = new Face(atoi(tokens[1].c_str()), atoi(tokens[2].c_str()), atoi(tokens[3].c_str()));
 	this->faces.push_back(face);
 }
 
@@ -132,7 +134,7 @@ bool PlyBuilder::validateFile(vector<string> tokens, string fileLocation)
 
 	if (!size || !plyDescriptor)
 	{
-		printf("ERROR!!!! File %s is not a ply file\n", fileLocation);
+		cout << "ERROR!!!! File " << fileLocation << " is not a ply file" << endl;
 		return false;
 	}
 
@@ -142,15 +144,15 @@ bool PlyBuilder::validateFile(vector<string> tokens, string fileLocation)
 
 bool PlyBuilder::verifyVertices()
 {
-	vector<Vertex> vertices = this->vertices;
+	vector<Vertex*> vertices = this->vertices;
 
 	if (this->totalVertices != vertices.size())
 	{
 		cout << "Error!!! The total number of vertices does not match the expected number of vertices" << endl;
 
-		for (int index = 0; index < vertices.size(); ++index)
+		for (unsigned int index = 0; index < vertices.size(); ++index)
 		{
-			point4 vertex = vertices[index].GetPosition();
+			point4 vertex = vertices[index]->GetPosition();
 			cout << "x: " << vertex.x << " y: " << vertex.y << " z: " << vertex.z << endl;
 		}
 
@@ -162,15 +164,15 @@ bool PlyBuilder::verifyVertices()
 
 bool PlyBuilder::verifyFaces()
 {
-	vector<Face> faces = this->faces;
+	vector<Face*> faces = this->faces;
 
 	if (this->totalFaces != faces.size())
 	{
 		cout << "Error!!! The total number of faces does not match the expected number of faces" << endl;
 
-		for (int index = 0; index < faces.size(); ++index)
+		for (unsigned int index = 0; index < faces.size(); ++index)
 		{
-			Face face = faces[index];
+			Face face = faces[index][0];
 			cout << "v1: " << face.v1 << " y: " << face.v2 << " z: " << face.v3 << endl;
 		}
 

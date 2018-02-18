@@ -2,21 +2,24 @@
 
 bool Ply::LoadGeometry()
 {
-	if (!this->builder.isLoaded())
+	if (this->builder->isLoaded()) return true;
+
+	bool success = this->builder->LoadPlyFile(this->filename);
+	
+	if (success)
 	{
-		this->builder.LoadPlyFile(this->filename);
-		this->boundingBox.PopulateBox(this->builder.getVertices());
+		this->vertices = this->builder->getVertices();
+		this->faces = this->builder->getFaces();
+
+		this->boundingBox.PopulateBox(this->vertices);
 	}
 
-	this->vertices = this->builder.getVertices();
-	this->faces = this->builder.getFaces();
-
-	return this->builder.isLoaded();
+	return success;
 }
 
 void Ply::UpdateColor(bool toggle)
 {
-	for (int index = 0; index < this->vertices.size(); index++)
+	for (unsigned int index = 0; index < this->vertices->size(); index++)
 	{
 		color4 currentColor = RED;
 		if (toggle)
@@ -24,7 +27,7 @@ void Ply::UpdateColor(bool toggle)
 			currentColor = this->colorRandomizer.GetRandomColor();
 		}
 
-		this->vertices[index].SetColor(currentColor);
+		this->vertices[0][index]->SetColor(currentColor);
 	}
 }
 

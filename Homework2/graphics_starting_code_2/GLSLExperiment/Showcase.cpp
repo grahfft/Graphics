@@ -11,7 +11,7 @@ mat4 Showcase::Display(Ply *currentPolygon, mat4 currentModel)
 
 
 	point4 newCenter = currentPolygon->getModelMatrix() * currentModel * box.Center;
-	mat4 display = Angel::Translate(newCenter.x, newCenter.y, newCenter.z) * Angel::RotateY(angle) * Angel::Translate(newCenter.x * -1, newCenter.y * -1, newCenter.z * -1); // Y in degrees
+	mat4 display = Angel::Translate(newCenter.x, newCenter.y, newCenter.z) * Angel::RotateY((GLfloat)angle) * Angel::Translate(newCenter.x * (GLfloat)-1, newCenter.y * (GLfloat)-1, newCenter.z * (GLfloat)-1); // Y in degrees
 
 	return display;
 }

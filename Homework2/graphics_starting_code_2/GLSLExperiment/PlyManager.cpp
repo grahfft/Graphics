@@ -63,30 +63,55 @@ void PlyManager::LoadPlyFiles()
 		this->createPly("tommygun.ply");
 	}
 
-	cout << "plyManager loaded up: " << this->polygons.size() << " polygons" << endl;
+	this->current = new Ply(this->files[0]);
+
+	cout << "plyManager loaded up: " << this->files.size() << " polygons" << endl;
 }
 
 Ply* PlyManager::GetCurrentPly() 
 {
-	Ply *currentPly = this->polygons[this->currentPly % this->polygons.size()];
+	this->plyLock->lock();
+	Ply* mesh = this->current;
+	this->plyLock->unlock();
 
-	if (!currentPly->LoadGeometry())
+	return mesh;
+}
+
+Ply* PlyManager::swapCurrent()
+{
+	
+	Ply* previous = this->current;
+
+	string currentFile = this->files[this->getIndex()];
+	Ply* next = new Ply(currentFile);
+
+	if (!next->LoadGeometry())
 	{
-		cout << "ERROR!!! Failed to load geometry for polygon: " << currentPly->getFilename() << endl;
+		cout << "ERROR!!!! FAILED TO LOAD GEOMETRY: " << next->getFilename() << endl;
 	}
 
-	return currentPly;
+	this->plyLock->lock();
+	this->current = next;
+	this->plyLock->unlock();
+	
+	if (previous != NULL)
+	{
+		delete previous;
+	}
+
+	return this->current;
 }
 
 Ply* PlyManager::GetNextPly()
 {
 	++this->currentPly;
+
 	if (this->currentPly == INT_MAX)
 	{
 		this->currentPly = 0;
 	}
 
-	return this->GetCurrentPly();
+	return this->swapCurrent();
 }
 
 Ply* PlyManager::GetPreviousPly()
@@ -97,20 +122,13 @@ Ply* PlyManager::GetPreviousPly()
 		this->currentPly = this->polygons.size() - 1;
 	}
 
-	return this->GetCurrentPly();
+	return this->swapCurrent();
 }
 
 void PlyManager::createPly(string filename)
 {
-	Ply *polygon = new Ply(this->program, filename);
-
-	if (polygon->LoadGeometry())
-	{
-		this->polygons.push_back(polygon);
-	}
-	else
-	{
-		cout << "ERROR!!! Failed to load geometry for polygon: " << polygon->getFilename() << endl;
-	}
+	/*Ply *polygon = new Ply(filename);
+	this->polygons.push_back(polygon);*/
+	this->files.push_back(filename);
 }
 

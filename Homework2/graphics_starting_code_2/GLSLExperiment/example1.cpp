@@ -40,9 +40,6 @@ Translator *translator;
 // Shears the current mesh
 Shearer *shearer;
 
-// Current Polygon to be drawn
-Ply *currentPolygon;
-
 // handle to shader program
 GLuint program;
 
@@ -191,16 +188,16 @@ void copyPolygonToFrameBuffer(Ply current)
 {
 	// Load Geometry
 	pointColorIndex = 0;
-	vector<Face> faces = *current.getFaces();
-	vector<Vertex> vertices = twister->TwistMesh(&current, translator->getTranslationMatrix());
+	vector<Face*> faces = *current.getFaces();
+	vector<Vertex*> vertices = twister->TwistMesh(&current, translator->getTranslationMatrix());
 
 	// Add vertices and colors from the faces
-	for (int index = 0; index < faces.size(); index++)
+	for (unsigned int index = 0; index < faces.size(); index++)
 	{
-		Face currentFace = faces[index];
-		AddVertexAndColor(vertices[currentFace.v1]);
-		AddVertexAndColor(vertices[currentFace.v2]);
-		AddVertexAndColor(vertices[currentFace.v3]);
+		Face currentFace = faces[index][0];
+		AddVertexAndColor(vertices[currentFace.v1][0]);
+		AddVertexAndColor(vertices[currentFace.v2][0]);
+		AddVertexAndColor(vertices[currentFace.v3][0]);
 	}
 
 	NumVertices = pointColorIndex - 1;
@@ -278,12 +275,12 @@ void sendToShader()
 
 void renderPolygon()
 {
-	Ply mesh = *currentPolygon;
+	Ply* mesh = plyManager->GetCurrentPly();
 
-	copyPolygonToFrameBuffer(mesh);
+	copyPolygonToFrameBuffer(*mesh);
 	sendToShader();
-	setProjectionMatrix(mesh);
-	setModelMatrix(mesh);
+	setProjectionMatrix(*mesh);
+	setModelMatrix(*mesh);
 	drawPolygon();
 }
 
@@ -306,6 +303,8 @@ void display( void )
 
 void keyboard( unsigned char key, int x, int y )
 {
+	Ply* currentPolygon = plyManager->GetCurrentPly();
+
     switch ( key ) 
 	{
 	case 'W':
@@ -313,7 +312,6 @@ void keyboard( unsigned char key, int x, int y )
 		// Question: Does this mean a reset to color?
 		// After changing x, y or z location, or rotating the wireframe (R key), W resets position and rotation by drawing the wireframe at origin and with no rotation applied. 
 		// W does NOT reset shear and twist effects.
-		currentPolygon = plyManager->GetCurrentPly();
 
 		translator->TurnOff();
 		translator->ResetTranslations();
@@ -483,7 +481,7 @@ void idle()
 
 	if (showcase->UpdateShowcase())
 	{
-		currentPolygon = plyManager->GetNextPly();
+		Ply* currentPolygon = plyManager->GetNextPly();
 		currentPolygon->UpdateColor(colorToggle);
 	}
 
@@ -495,6 +493,7 @@ void reshape(int width, int height)
 	currentWindowWidth = width;
 	currentWindowHeight = height;
 
+	Ply* currentPolygon = plyManager->GetCurrentPly();
 	currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
 }
 
@@ -560,10 +559,11 @@ void initTransformers()
 
 void initPolygons()
 {
-	plyManager = new PlyManager(program);
+	plyManager = new PlyManager();
 	plyManager->LoadPlyFiles();
 
-	currentPolygon = plyManager->GetCurrentPly();
+	Ply* currentPolygon = plyManager->GetCurrentPly();
+	currentPolygon->LoadGeometry();
 	currentPolygon->UpdateWindow(currentWindowWidth, currentWindowHeight);
 
 	copyPolygonToFrameBuffer(*currentPolygon);

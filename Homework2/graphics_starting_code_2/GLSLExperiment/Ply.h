@@ -17,12 +17,12 @@ public:
 	* Constructors
 	*/
 	Ply() {};
-	Ply::Ply(GLuint program, string filename)
+	Ply::Ply(string filename)
 	{
-		this->program = program;
 		this->filename = filename;
-		this->vertices = vector<Vertex>();
-		this->faces = vector<Face>();
+		this->builder = new PlyBuilder();
+		this->vertices = new vector<Vertex*>();
+		this->faces = new vector<Face*>();
 	}
 
 	/*
@@ -53,17 +53,19 @@ public:
 	/*
 	* Gets all loaded Vertices
 	*/
-	vector<Vertex>* getVertices()
+	vector<Vertex*>* getVertices()
 	{
-		return &this->vertices;
+		vector<Vertex*>* vs = this->vertices;
+		return vs;
 	}
 
 	/*
 	* Gets all loaded Faces
 	*/
-	vector<Face>* getFaces()
+	vector<Face*>* getFaces()
 	{
-		return &this->faces;
+		vector<Face*>* vs = this->faces;
+		return vs;
 	}
 
 	/*
@@ -116,17 +118,12 @@ private:
 	/*
 	* Vertex list to reference from 
 	*/
-	vector<Vertex> vertices;
+	vector<Vertex*>* vertices;
 
 	/*
 	* face that contain vertices; to draw look up in vertex list
 	*/
-	vector<Face> faces;
-
-	/*
-	* program to send shader variables
-	*/
-	GLuint program;
+	vector<Face*>* faces;
 
 	/*
 	* ply filename
@@ -136,7 +133,7 @@ private:
 	/*
 	* Builds polygon from file
 	*/
-	PlyBuilder builder;
+	PlyBuilder* builder;
 
 	/*
 	* Generates random colors for vertices

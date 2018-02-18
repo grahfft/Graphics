@@ -21,7 +21,7 @@ public:
 	/*
 	* 
 	*/
-	vector<Vertex> TwistMesh(Ply *currentPly, mat4 currentModel);
+	vector<Vertex*> TwistMesh(Ply *currentPly, mat4 currentModel);
 
 	/*
 	* Increment the angle of twist
@@ -82,6 +82,6 @@ private:
 	/*
 	* Rotates the point and creates a new vertex
 	*/
-	Vertex createTwistedVertex(point4 vertex, point4 center, int interval);
+	Vertex* createTwistedVertex(point4 vertex, point4 center, int interval);
 };
 

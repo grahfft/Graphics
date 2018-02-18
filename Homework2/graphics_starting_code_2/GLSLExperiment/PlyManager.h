@@ -15,11 +15,12 @@ public:
 	/*
 	* Constructors
 	*/
-	PlyManager(GLuint program)
+	PlyManager()
 	{
 		this->polygons = vector<Ply*>();
-	};	
-	PlyManager() {};
+		this->plyLock = new mutex();
+		this->current = new Ply();
+	};
 
 	/*
 	* Destructor
@@ -58,10 +59,16 @@ private:
 	*/
 	int currentPly = 0;
 
+	Ply* current;
+
 	/*
 	* List of all displayable polygons
 	*/
 	vector<Ply*> polygons;
+
+	vector<string> files;
+
+	mutex* plyLock;
 
 	/*
 	* Creates and builds each polygon; if the file loads successfully added to polygon list
@@ -69,9 +76,16 @@ private:
 	void createPly(string filename);
 
 	/*
+	* Returns current index
+	*/
+	int getIndex() { return this->currentPly % this->files.size(); }
+
+	Ply* PlyManager::swapCurrent();
+
+	/*
 	* Prevents loading all polygons while developing
 	*/
-	bool devMode = true;
+	bool devMode = false;
 };
 
 #endif

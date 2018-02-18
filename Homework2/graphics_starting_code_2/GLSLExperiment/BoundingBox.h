@@ -20,21 +20,23 @@ class BoundingBox
 		/*
 		* Populates the bounding box from the vertices provided
 		*/
-		void PopulateBox(vector<Vertex> vertices)
+		void PopulateBox(vector<Vertex*>* v)
 		{
 			float centerX, centerY, centerZ = 0;
 
-			this->Right = INT_MIN;
-			this->Top = INT_MIN;
-			this->Far = INT_MIN;
+			this->Right = (float)INT_MIN;
+			this->Top = (float)INT_MIN;
+			this->Far = (float)INT_MIN;
 
-			this->Left = INT_MAX;
-			this->Bottom = INT_MAX;
-			this->Near = INT_MAX;
+			this->Left = (float)INT_MAX;
+			this->Bottom = (float)INT_MAX;
+			this->Near = (float)INT_MAX;
 
-			for (int index = 0; index < vertices.size(); ++index)
+			vector<Vertex*> vertices = *v;
+
+			for (unsigned int index = 0; index < vertices.size(); ++index)
 			{
-				point4 vertex = vertices[index].GetPosition();
+				point4 vertex = vertices[index]->GetPosition();
 
 				// X comparisons
 				if (vertex.x < this->Left) this->Left = vertex.x;

@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iterator>
 #include <limits.h>
+#include <mutex>
 
 #define MAXPOINTS 50000
 #define MAXCOLOR 50000
