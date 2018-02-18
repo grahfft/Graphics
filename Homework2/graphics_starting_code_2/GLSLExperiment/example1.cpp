@@ -595,8 +595,7 @@ int main( int argc, char **argv )
 	initShaders();
 
 	// Added so white background doesn't flicker on start
-	// prepareVertexBufferObject();
-	glClearColor(1.0, 1.0, 1.0, 1.0); // white background
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	// enter the drawing loop
     glutMainLoop();

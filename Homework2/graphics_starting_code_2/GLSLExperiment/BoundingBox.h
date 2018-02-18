@@ -7,10 +7,19 @@
 class BoundingBox
 {
 	public:
+		/*
+		* Constructor
+		*/
 		BoundingBox() {}
 
+		/*
+		* Deconstructor
+		*/
 		~BoundingBox() {};
 
+		/*
+		* Populates the bounding box from the vertices provided
+		*/
 		void PopulateBox(vector<Vertex> vertices)
 		{
 			float centerX, centerY, centerZ = 0;
@@ -47,13 +56,23 @@ class BoundingBox
 			this->Center = point4(centerX, centerY, centerZ, 1.0);
 		}
 
+		/*
+		* Current work around for not understanding perspective
+		*/
 		mat4 CreateInitiatlPosition()
 		{
-			float distance = 2 * (abs(this->Near) + abs(this->Far));
+			float distance = 5 * (abs(this->Near) + abs(this->Far));
 
+			/*
+			*  Angel::Translate(this->Center.x, this->Center.y, this->Center.z) * Angel::Translate(0,0, distance * -1)
+			* Currently moves center to 0,0,0
+			*/
 			return Angel::Translate(this->Center.x, this->Center.y, this->Center.z) * Angel::Translate(0,0, distance * -1) * Angel::Translate(this->Center.x * -1, this->Center.y * -1, this->Center.z * -1);
 		}
 
+		/*
+		* Information on the bounding box of the polygon
+		*/
 		point4 Center = point4(0, 0, 0, 1);
 		float Left = -1.0;
 		float Bottom = -1.0;

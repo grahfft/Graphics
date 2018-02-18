@@ -66,6 +66,11 @@ private:
 	* Creates and builds each polygon; if the file loads successfully added to polygon list
 	*/
 	void createPly(string filename);
+
+	/*
+	* Prevents loading all polygons while developing
+	*/
+	bool devMode = true;
 };
 
 #endif

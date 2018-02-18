@@ -3,27 +3,25 @@
 mat4 Showcase::Display(Ply *currentPolygon)
 {
 	bool showcase = this->grandShowcase;
+	if (!showcase) return this->currentImageRotation;
+
 	mat4 display = this->currentImageRotation;
+	BoundingBox box = currentPolygon->getBoundingBox();
 
-	if (showcase)
+	if (this->currentTransformations.size() == 0)
 	{
-		BoundingBox box = currentPolygon->getBoundingBox();
-
-		if (this->currentTransformations.size() == 0)
-		{
-			this->currentTransformations = currentPolygon->getTransformations();
-		}
-		else
-		{
-			currentPolygon->setTransformations(this->currentTransformations);
-		}
-
-		mat4 currentModel = currentPolygon->getModelMatrix();
-
-		point4 newCenter = currentModel * box.Center;
-		display = Angel::Translate(newCenter.x, newCenter.y, newCenter.z) * Angel::RotateY(this->theta) * Angel::Translate(newCenter.x * -1, newCenter.y * -1, newCenter.z * -1); // Y in degrees
-		this->currentImageRotation = display;
+		this->currentTransformations = currentPolygon->getTransformations();
 	}
+	else
+	{
+		currentPolygon->setTransformations(this->currentTransformations);
+	}
+
+	mat4 currentModel = currentPolygon->getModelMatrix();
+
+	point4 newCenter = currentModel * box.Center;
+	display = Angel::Translate(newCenter.x, newCenter.y, newCenter.z) * Angel::RotateY(this->theta) * Angel::Translate(newCenter.x * -1, newCenter.y * -1, newCenter.z * -1); // Y in degrees
+	this->currentImageRotation = display;
 
 	return display;
 }
