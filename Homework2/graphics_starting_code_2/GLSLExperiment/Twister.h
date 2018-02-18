@@ -45,6 +45,14 @@ public:
 		}
 	}
 
+	/*
+	* Resets the twist angle
+	*/
+	void ResetTwist()
+	{
+		this->baseTheta = 0;
+	}
+
 private:
 	/*
 	* base theta to increment rotation by

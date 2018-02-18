@@ -54,7 +54,7 @@ public:
 	/*
 	* Clears the showcase's state data
 	*/
-	void CleanShowcaseState()
+	void ResetShowcase()
 	{
 		this->theta = 0;
 		this->currentImageRotation = Angel::identity();

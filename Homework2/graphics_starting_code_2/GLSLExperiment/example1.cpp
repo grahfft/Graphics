@@ -143,6 +143,11 @@ void reshape(int width, int height);
 void clearPriorPolygonState(void);
 
 /*
+* Clears the current transform state
+*/
+void clearTransformState(void);
+
+/*
 * Initializes GLUT window
 */
 void initWindow(int argc, char **argv);
@@ -321,9 +326,7 @@ void keyboard( unsigned char key, int x, int y )
 		// After changing x, y or z location, or rotating the wireframe (R key), W resets position and rotation by drawing the wireframe at origin and with no rotation applied. 
 		// W does NOT reset shear and twist effects.
 		currentPolygon = plyManager->GetCurrentPly();
-		clearPriorPolygonState();
-		showcase.CleanShowcaseState();
-		translator.ClearTranslations();
+		clearTransformState();		
 		break;
 
 	case 'N':
@@ -333,9 +336,7 @@ void keyboard( unsigned char key, int x, int y )
 		// So to properly set up the viewing position using LookAt, you may have to calculate the bounding box of the mesh and then set your view distance to a suitable multiple of the bounding box
 		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetNextPly();
-		clearPriorPolygonState();
-		showcase.CleanShowcaseState();
-		translator.ClearTranslations();
+		clearTransformState();
 		break;
 
 	case 'P':
@@ -343,9 +344,7 @@ void keyboard( unsigned char key, int x, int y )
 		// Hitting P should load and draw the previous wireframe model to the current one in your list of PLY files. 
 		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetPreviousPly();	
-		clearPriorPolygonState();
-		showcase.CleanShowcaseState();
-		translator.ClearTranslations();
+		clearTransformState();
 		break;
 
 	case 'X':
@@ -550,6 +549,15 @@ void clearPriorPolygonState()
 	colorToggle = false;
 
 	translator.TurnOff();
+}
+
+void clearTransformState()
+{
+	clearPriorPolygonState();
+	showcase.ResetShowcase();
+	translator.ResetTranslations();
+	shearer.ResetShear();
+	twister.ResetTwist();
 }
 
 void initWindow(int argc, char **argv)
