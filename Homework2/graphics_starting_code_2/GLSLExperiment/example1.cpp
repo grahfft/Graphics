@@ -320,6 +320,7 @@ void keyboard( unsigned char key, int x, int y )
 		currentPolygon = plyManager->GetCurrentPly();
 		clearPriorPolygonState();
 		showcase.CleanShowcaseState();
+		translator.ClearTranslations();
 		break;
 
 	case 'N':
@@ -331,6 +332,7 @@ void keyboard( unsigned char key, int x, int y )
 		currentPolygon = plyManager->GetNextPly();
 		clearPriorPolygonState();
 		showcase.CleanShowcaseState();
+		translator.ClearTranslations();
 		break;
 
 	case 'P':
@@ -340,6 +342,7 @@ void keyboard( unsigned char key, int x, int y )
 		currentPolygon = plyManager->GetPreviousPly();	
 		clearPriorPolygonState();
 		showcase.CleanShowcaseState();
+		translator.ClearTranslations();
 		break;
 
 	case 'X':

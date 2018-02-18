@@ -15,10 +15,7 @@ public:
 	/*
 	* Constructor
 	*/
-	Showcase() 
-	{
-		this->currentTransformations = vector<mat4>();
-	};
+	Showcase() {};
 
 	/*
 	* Deconstructor
@@ -31,10 +28,6 @@ public:
 	void ToggleShowcase()
 	{
 		this->grandShowcase = !this->grandShowcase;
-		if (this->grandShowcase)
-		{
-			this->currentTransformations = vector<mat4>();
-		}
 	}
 
 	/*
@@ -77,11 +70,6 @@ private:
 	* Determines whether to rotate the image clockwise or counterclockwise
 	*/
 	bool clockwise = false;
-
-	/*
-	* Stores the current tranformations for passing to subsequent polygons
-	*/
-	vector<mat4> currentTransformations;
 
 	/*
 	* Angle to rotate the image

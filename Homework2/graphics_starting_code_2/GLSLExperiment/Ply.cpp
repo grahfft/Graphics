@@ -10,7 +10,6 @@ bool Ply::LoadGeometry()
 
 	this->vertices = this->builder.getVertices();
 	this->faces = this->builder.getFaces();
-	this->transformations = vector<mat4>();
 
 	return this->builder.isLoaded();
 }

@@ -23,7 +23,6 @@ public:
 		this->filename = filename;
 		this->vertices = vector<Vertex>();
 		this->faces = vector<Face>();
-		this->transformations = vector<mat4>();
 	}
 
 	/*
@@ -50,21 +49,6 @@ public:
 		this->height = height;
 		glViewport(0, 0, this->width, this->height);
 	}
-
-	/*
-	* adds translation to x axis
-	*/
-	void AddXaxisTranslation(bool positive, bool negative);
-
-	/*
-	* adds translation to y axis
-	*/
-	void AddYaxisTranslation(bool positive, bool negative);
-
-	/*
-	* adds translation to z axis
-	*/
-	void AddZaxisTranslation(bool positive, bool negative);
 
 	/*
 	* Increases the shear by decrementing the angle; prevents a cot(0) which is undefined
@@ -96,22 +80,6 @@ public:
 	vector<Face> getFaces()
 	{
 		return this->faces;
-	}
-
-	/*
-	* Get the current list of transformations applied to the polygon
-	*/
-	vector<mat4> getTransformations()
-	{
-		return this->transformations;
-	}
-
-	/*
-	* Overwrites the current transformation list
-	*/
-	void setTransformations(vector<mat4> transformations)
-	{
-		this->transformations = transformations;
 	}
 
 	/*
@@ -152,11 +120,6 @@ private:
 	int height = STARTHEIGHT;
 
 	int shearInDegrees = STARTANGLE;
-
-	/*
-	* List of all transformations
-	*/
-	vector<mat4> transformations;
 
 	/*
 	* Current Projection View
