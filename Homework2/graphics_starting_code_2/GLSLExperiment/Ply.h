@@ -84,6 +84,14 @@ public:
 	*/
 	mat4 getProjectionMatrix()
 	{
+		/*float highestValue = abs(this->boundingBox.Left);
+
+		if (highestValue < abs(this->boundingBox.Right)) highestValue = abs(this->boundingBox.Right);
+		if (highestValue < abs(this->boundingBox.Near)) highestValue = abs(this->boundingBox.Near);
+		if (highestValue < abs(this->boundingBox.Far)) highestValue = abs(this->boundingBox.Far);
+
+
+		return Ortho(highestValue * -1, highestValue, this->boundingBox.Bottom, this->boundingBox.Top, 10 * (highestValue * -1), 10 * highestValue);*/
 		return this->projView;
 	}
 

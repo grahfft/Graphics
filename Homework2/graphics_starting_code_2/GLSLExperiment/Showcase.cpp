@@ -20,21 +20,21 @@ bool Showcase::UpdateShowcase()
 	if (this->clockwise)
 	{
 		--this->theta;
+
+		if (this->theta == 0)
+		{
+			this->clockwise = false;
+			return true;
+		}
 	}
 	else
 	{
 		++this->theta;
-	}
 
-	if (this->theta == 360) {
-		this->clockwise = true;
-		return true;
-	}
-
-	if (this->theta == 0)
-	{
-		this->clockwise = false;
-		return true;
+		if (this->theta == 360) {
+			this->clockwise = true;
+			return true;
+		}
 	}
 
 	return false;

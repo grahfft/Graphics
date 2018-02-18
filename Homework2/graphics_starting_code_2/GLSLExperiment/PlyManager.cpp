@@ -59,7 +59,8 @@ void PlyManager::LoadPlyFiles()
 
 		this->createPly("cube.ply");
 		this->createPly("cow.ply");
-		this->createPly("shark.ply");
+		this->createPly("hammerhead.ply");
+		this->createPly("tommygun.ply");
 	}
 
 	cout << "plyManager loaded up: " << this->polygons.size() << " polygons" << endl;
