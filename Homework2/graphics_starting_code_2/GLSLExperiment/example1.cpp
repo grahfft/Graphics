@@ -5,6 +5,7 @@
 
 #include "PlyManager.h"
 #include "Showcase.h"
+#include "Twister.h"
 
 #endif
 
@@ -28,8 +29,11 @@ int pointColorIndex = 0;
 // Polygon Manager
 PlyManager *plyManager;
 
-// Showcase
+// Showcases polygons based on assignment
 Showcase showcase;
+
+// Twists the mesh
+Twister twister;
 
 // Current Polygon to be drawn
 Ply currentPolygon;
@@ -188,7 +192,7 @@ void copyPolygonToFrameBuffer()
 	// Load Geometry
 	pointColorIndex = 0;
 	vector<Face> faces = currentPolygon.getFaces();
-	vector<Vertex> vertices = currentPolygon.getVertices();
+	vector<Vertex> vertices = twister.TwistMesh(&currentPolygon);
 
 	// Add vertices and colors from the faces
 	for (int index = 0; index < faces.size(); index++)
@@ -446,18 +450,15 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO:  Increment the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 't' key should twist the wireframe by a bit more and more. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
-
-
-
+		twister.IncrementTwist();
 		break;
 
 	case 'T':
 		//TODO: Decrease the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 'T' key should twist the wireframe by a bit less and less. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
-
 		// The further from the center each point is; increase the rotation of the point
-
+		twister.DecrementTwist();
 		break;
 
     case 033:

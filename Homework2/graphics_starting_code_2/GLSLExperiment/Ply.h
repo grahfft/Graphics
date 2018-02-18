@@ -98,11 +98,17 @@ public:
 		return this->faces;
 	}
 
+	/*
+	* Get the current list of transformations applied to the polygon
+	*/
 	vector<mat4> getTransformations()
 	{
 		return this->transformations;
 	}
 
+	/*
+	* Overwrites the current transformation list
+	*/
 	void setTransformations(vector<mat4> transformations)
 	{
 		this->transformations = transformations;
@@ -129,6 +135,9 @@ public:
 		return this->projView;
 	}
 
+	/*
+	* Gets the polygon's bounding box
+	*/
 	BoundingBox getBoundingBox() { return this->boundingBox; }
 
 private:
