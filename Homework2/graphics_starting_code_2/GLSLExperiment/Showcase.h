@@ -56,7 +56,8 @@ public:
 	*/
 	void ResetShowcase()
 	{
-		this->theta = 0;
+		this->grandShowcase = false;
+		this->theta = STARTROTATIONANGLE;
 		this->currentImageRotation = Angel::identity();
 	}
 	
@@ -64,7 +65,7 @@ private:
 	/*
 	* Bool to determine if the showcase is on or off
 	*/
-	bool grandShowcase;
+	bool grandShowcase = false;
 
 	/*
 	* Determines whether to rotate the image clockwise or counterclockwise
@@ -74,12 +75,14 @@ private:
 	/*
 	* Angle to rotate the image
 	*/
-	int theta = 0;
+	int theta = STARTROTATIONANGLE;
 
 	/*
 	* Maintains the current rotation matrix for the showcase
 	*/
 	mat4 currentImageRotation;
+
+	bool printed = false;
 };
 
 #endif

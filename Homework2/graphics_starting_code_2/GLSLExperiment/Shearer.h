@@ -52,9 +52,9 @@ public:
 	/*
 	* Resets the shear angle
 	*/
-	void ResetShear() { this->shearInDegrees = STARTANGLE; }
+	void ResetShear() { this->shearInDegrees = STARTSHEARANGLE; }
 
 private:
-	int shearInDegrees = STARTANGLE;
+	int shearInDegrees = STARTSHEARANGLE;
 };
 

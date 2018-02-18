@@ -78,8 +78,10 @@ public:
 	/*
 	* Adds translations in the appropriate directions
 	*/
-	void AddTranslations()
+	void AddTranslations(bool preventTranslation)
 	{
+		if (preventTranslation) return;
+
 		this->AddXaxisTranslation();
 		this->AddYaxisTranslation();
 		this->AddZaxisTranslation();

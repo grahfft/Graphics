@@ -16,15 +16,6 @@
 // Toggle for random colors
 bool colorToggle = false;
 
-bool positiveX = false;
-bool negativeX = false;
-
-bool positiveY = false;
-bool negativeY = false;
-
-bool positiveZ = false;
-bool negativeZ = false;
-
 // Index for Vertex Buffer
 int pointColorIndex = 0;
 
@@ -248,7 +239,7 @@ void setModelMatrix()
 	mat4 currentModel = currentPolygon.getModelMatrix();
 	mat4 shearMatrix = shearer.CreateShear();
 
-	modelMat = modelMat * showcaseMatrix * translationMatrix  * currentModel * shearMatrix;
+	modelMat = modelMat * showcaseMatrix  * currentModel * translationMatrix * shearMatrix;
 	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -423,7 +414,7 @@ void keyboard( unsigned char key, int x, int y )
 		showcase.ToggleShowcase();
 		if (!showcase.ShowcaseOn())
 		{
-			clearPriorPolygonState();
+			translator.TurnOff();
 		}
 		break;
 
@@ -443,9 +434,7 @@ void keyboard( unsigned char key, int x, int y )
 		// Trying to reduce shearing further beyond 0 should have no effect. 
 		// The same goes for twist. 
 		// Trying to reduce twist beyond 0 should have no effect.
-		// TODO: increment shear (subtract from angle) 
-		
-		// currentPolygon.IncreaseShear();
+		// TODO: increment shear (subtract from angle) 		
 		shearer.IncreaseShear();
 		break;
 
@@ -454,8 +443,6 @@ void keyboard( unsigned char key, int x, int y )
 		// Repeatedly hitting the 'H' key should shear the wireframe by a bit less and less. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh.
 		// TODO: Decreas angle of shear (add to angle)
-		
-		//currentPolygon.DecreaseShear();
 		shearer.DecreaseShear();
 		break;
 
@@ -484,18 +471,12 @@ void keyboard( unsigned char key, int x, int y )
 
 void idle() 
 {
-	if (!showcase.ShowcaseOn())
+	translator.AddTranslations(showcase.ShowcaseOn());
+
+	if (showcase.UpdateShowcase())
 	{
-		translator.AddTranslations();
-	}
-	else
-	{
-		bool nextPoly = showcase.UpdateShowcase();
-		if (nextPoly)
-		{
-			currentPolygon = plyManager->GetNextPly();
-			currentPolygon.UpdateColor(colorToggle);
-		}
+		currentPolygon = plyManager->GetNextPly();
+		currentPolygon.UpdateColor(colorToggle);
 	}
 
 	glutPostRedisplay();

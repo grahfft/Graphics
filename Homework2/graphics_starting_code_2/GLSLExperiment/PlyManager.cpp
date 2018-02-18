@@ -57,7 +57,8 @@ void PlyManager::LoadPlyFiles()
 	{
 		cout << "Loading all dev ply files. This may take some time..." << endl;
 
-		this->createPly("cube.ply");
+		// this->createPly("cube.ply");
+		this->createPly("ant.ply");
 		this->createPly("cow.ply");
 		this->createPly("hammerhead.ply");
 		this->createPly("tommygun.ply");

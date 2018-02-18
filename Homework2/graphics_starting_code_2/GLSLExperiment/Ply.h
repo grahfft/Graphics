@@ -84,7 +84,9 @@ public:
 	*/
 	mat4 getProjectionMatrix()
 	{
-		/*float highestValue = abs(this->boundingBox.Left);
+		/*
+		// This breaks rotation why!?
+		float highestValue = abs(this->boundingBox.Left);
 
 		if (highestValue < abs(this->boundingBox.Right)) highestValue = abs(this->boundingBox.Right);
 		if (highestValue < abs(this->boundingBox.Near)) highestValue = abs(this->boundingBox.Near);
