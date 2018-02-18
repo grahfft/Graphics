@@ -57,6 +57,15 @@ public:
 	* Updates the showcase rotation and signals if the current polygon needs updating
 	*/
 	bool UpdateShowcase();
+
+	/*
+	* Clears the showcase's state data
+	*/
+	void CleanShowcaseState()
+	{
+		this->theta = 0;
+		this->currentImageRotation = Angel::identity();
+	}
 	
 private:
 	/*
@@ -78,6 +87,11 @@ private:
 	* Angle to rotate the image
 	*/
 	int theta = 0;
+
+	/*
+	* Maintains the current rotation matrix for the showcase
+	*/
+	mat4 currentImageRotation;
 };
 
 #endif

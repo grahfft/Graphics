@@ -306,6 +306,7 @@ void keyboard( unsigned char key, int x, int y )
 		// W does NOT reset shear and twist effects.
 		currentPolygon = plyManager->GetCurrentPly();
 		clearPriorPolygonState();
+		showcase.CleanShowcaseState();
 		break;
 
 	case 'N':
@@ -316,6 +317,7 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetNextPly();
 		clearPriorPolygonState();
+		showcase.CleanShowcaseState();
 		break;
 
 	case 'P':
@@ -324,6 +326,7 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO: Currently working but need to set start position and bounding box
 		currentPolygon = plyManager->GetPreviousPly();	
 		clearPriorPolygonState();
+		showcase.CleanShowcaseState();
 		break;
 
 	case 'X':
@@ -479,6 +482,7 @@ void idle()
 		if (nextPoly)
 		{
 			currentPolygon = plyManager->GetNextPly();
+			currentPolygon.UpdateColor(colorToggle);
 		}
 	}
 
