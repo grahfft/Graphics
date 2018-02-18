@@ -20,6 +20,7 @@ vector<Vertex> Twister::TwistMesh(Ply *currentPly)
 		if (position.x < box.Center.x) interval = interval * -1;
 
 		newPoints[index] = this->createTwistedVertex(position, interval);
+		newPoints[index].SetColor(v.GetColor());
 	}
 
 	return newPoints;

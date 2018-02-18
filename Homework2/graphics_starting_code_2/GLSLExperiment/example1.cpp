@@ -340,10 +340,8 @@ void keyboard( unsigned char key, int x, int y )
 		// Camera position remains fixed for this translation and all other translations below. 
 		// The exact amount to move the ply file before redrawing will affect how much and how much your translation is apparent depends on how far you positioned your wireframe from the viewer. 
 		// So, it's left to you as a design choice to pick an appropriate distance to translate the wireframe along the +ve X axis each time the user hits 'X'. 
-
 		// Pressing 'X' and then 'x' moves the PLY file along +x then -x. Translations are generally concatenated. 
 		// Hitting 'X' and then 'Y' moves the PLY file along the +x direction and then WITHOUT RETURNING TO ORIGIN, moves the PLY file along +y direction.
-
 		// TODO: Toggle key; Translate in the positive X direction
 		positiveX = !positiveX;
 		break;
@@ -351,7 +349,6 @@ void keyboard( unsigned char key, int x, int y )
 	case 'x':
 		// TODO: (Translate your wireframe in the -ve X direction) Use the idle function to continuously move your wireframe some units along the -ve X axis. 
 		// The number of units to translate your wireframe each time the user hits 'x' is left to you as a design choice. 
-
 		// TODO: Toggle key; Translate in the negative X direction
 		negativeX = !negativeX;
 		break;
@@ -359,7 +356,6 @@ void keyboard( unsigned char key, int x, int y )
 	case 'Y':
 		// TODO: (Translate your wireframe in the +ve Y direction) Use the idle function to continuously move your wireframe some units along the +ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'Y' is left to you as a design choice. 
-
 		// TODO: Toggle key; Translate in the positive Y direction
 		positiveY = !positiveY;
 		break;
@@ -367,7 +363,6 @@ void keyboard( unsigned char key, int x, int y )
 	case 'y':
 		// TODO: (Translate your wireframe in the -ve y direction) Use the idle function to continuously move your wireframe some units along the -ve Y axis. 
 		// The number of units to translate your wireframe each time the user hits 'y' is left to you as a design choice. 
-
 		// TODO: Toggle key; Translate in the positive Y direction
 		negativeY = !negativeY;
 		break;
@@ -375,7 +370,6 @@ void keyboard( unsigned char key, int x, int y )
 	case 'Z':
 		// TODO: (Translate your wireframe in the +ve Z direction) Use the idle function to continuously move your wireframe some units along the +ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'Z' is left to you as a design choice.
-
 		// TODO: Toggle key; Translate in the positive Z direction
 		positiveZ = !positiveZ;
 		break;
@@ -383,7 +377,6 @@ void keyboard( unsigned char key, int x, int y )
 	case 'z':
 		// TODO: (Translate your wireframe in the -ve Z direction) Use the idle function to continuously move your wireframe some units along the -ve Z axis. 
 		// The number of units to translate your wireframe each time the user hits 'z' is left to you as a design choice.
-
 		// TODO: Toggle key; Translate in the negative Z direction
 		negativeZ = !negativeZ;
 		break;
@@ -402,7 +395,6 @@ void keyboard( unsigned char key, int x, int y )
 		// The 'R' key is hit once and then the current PLY file is rotated clockwise 360 degrees.After this 360 degree rotation, this current PLY file is erased and the next PLY file is drawn at the same position and then rotated ANTI - CLOCKWISE 360 degrees.
 		// This file is then erased and the next PLY file is drawn and rotated CLOCKWISE 360 degrees, and so on.Essentially, PLY file 1 is rotated clockwise, PLY file 2 is rotated anti - clockwise, PLY file 3 is rotated clockwise, etc.
 		// If the user hits 'R' once and just watches, PLY files 1 - 43 will eventually be displayed one by one WITHOUT ANY ADDITIONAL keys being pressed.
-
 		// TODO: Calculate center of meshes; Translate center to origin; push out a Z for now;
 		// TODO: Showcase class will need to maintain current transform for ALL images
 		//		 Showcase class will reverse direction after 360 degrees
@@ -413,7 +405,6 @@ void keyboard( unsigned char key, int x, int y )
 		{
 			clearPriorPolygonState();
 		}
-
 		break;
 
 	case 'c':
@@ -432,7 +423,6 @@ void keyboard( unsigned char key, int x, int y )
 		// Trying to reduce shearing further beyond 0 should have no effect. 
 		// The same goes for twist. 
 		// Trying to reduce twist beyond 0 should have no effect.
-
 		// TODO: increment shear (subtract from angle) 
 		currentPolygon.IncreaseShear();
 		break;
@@ -441,7 +431,6 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO: Decrease the amount of shearing of the wireframe along the X axis by a small amount. 
 		// Repeatedly hitting the 'H' key should shear the wireframe by a bit less and less. 
 		// Note that after you shear the mesh, performing a transform (e.g. rotation, scale or translate) should transform the sheared mesh.
-
 		// TODO: Decreas angle of shear (add to angle)
 		currentPolygon.DecreaseShear();
 		break;
