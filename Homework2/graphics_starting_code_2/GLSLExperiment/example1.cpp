@@ -226,7 +226,8 @@ void setModelMatrix()
 {
 	// Section for Model Matrix
 	Angel::mat4 modelMat = Angel::identity();
-	modelMat = modelMat * showcase.Display(currentPolygon);
+	modelMat = modelMat * showcase.Display(&currentPolygon);
+	modelMat = modelMat * currentPolygon.getModelMatrix();
 	
 	float modelMatrixf[16];
 	modelMatrixf[0] = modelMat[0][0]; modelMatrixf[4] = modelMat[0][1];
@@ -401,8 +402,10 @@ void keyboard( unsigned char key, int x, int y )
 		//		 Showcase class will load next Ply file
 
 		showcase.ToggleShowcase();
-
-
+		if (!showcase.ShowcaseOn())
+		{
+			clearPriorPolygonState();
+		}
 
 		break;
 
@@ -440,12 +443,18 @@ void keyboard( unsigned char key, int x, int y )
 		// TODO:  Increment the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 't' key should twist the wireframe by a bit more and more. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
+
+
+
 		break;
 
 	case 'T':
 		//TODO: Decrease the amount of twisting of the wireframe around the Y axis by a small amount. 
 		// Repeatedly hitting the 'T' key should twist the wireframe by a bit less and less. 
 		// Note that after you twist the mesh, performing a transform (e.g. rotation, scale or translate) should transform the twisted mesh.
+
+		// The further from the center each point is; increase the rotation of the point
+
 		break;
 
     case 033:

@@ -5,17 +5,29 @@
 
 #include "Ply.h"
 
+/*
+* This class maintains the state of the R keyboard showcase
+* The class is designed to return a matrix to add to the CTM when needed
+*/
 class Showcase
 {
 public:
+	/*
+	* Constructor
+	*/
 	Showcase() 
 	{
 		this->currentTransformations = vector<mat4>();
 	};
 
-
+	/*
+	* Deconstructor
+	*/
 	~Showcase() {};
 
+	/*
+	* Toggles the showcase on or off
+	*/
 	void ToggleShowcase()
 	{
 		this->grandShowcase = !this->grandShowcase;
@@ -25,6 +37,9 @@ public:
 		}
 	}
 
+	/*
+	* Checks whether the showcase is on
+	*/
 	bool ShowcaseOn() 
 	{
 		bool current = this->grandShowcase;
@@ -32,72 +47,36 @@ public:
 	}
 
 	/*
-	* THIS FUCKING WORKS NEED TO ADD IN INCREMENT AND DECREMENT TO IDLE FUNCTION
+	* Checks whether the showcase is running
+	* If running, provides a rotated matrix
+	* Otherwise returns the identity matrix
 	*/
-	mat4 Display(Ply currentPolygon)
-	{
-		bool showcase = this->grandShowcase;
-		mat4 display = Angel::identity();
-		BoundingBox box = currentPolygon.getBoundingBox();
+	mat4 Display(Ply *currentPolygon);
 
-		if (showcase)
-		{
-			if (this->currentTransformations.size() == 0)
-			{
-				this->currentTransformations = currentPolygon.getTransformations();
-			}
-			else
-			{
-				currentPolygon.setTransformations(this->currentTransformations);
-			}
-
-			mat4 currentModel = currentPolygon.getModelMatrix();
-
-			point4 newCenter = currentModel * box.Center;
-			mat4 rotate = Angel::Translate(newCenter.x, newCenter.y, newCenter.z) * Angel::RotateY(this->theta) * Angel::Translate(newCenter.x * -1, newCenter.y * -1, newCenter.z * -1); // Y in degrees
-
-			display = display * rotate * currentModel;
-		}
-		else
-		{
-			display = display * currentPolygon.getModelMatrix();
-		}
-
-		return display;
-	}
-
-	bool UpdateShowcase()
-	{
-		if (this->clockwise)
-		{
-			--this->theta;
-		}
-		else
-		{
-			++this->theta;
-		}
-
-		if (this->theta == 360) {
-			this->clockwise = true;
-			return true;
-		}
-
-		if (this->theta == 0)
-		{
-			this->clockwise = false;
-			return true;
-		}
-
-		return false;
-	}
-
+	/*
+	* Updates the showcase rotation and signals if the current polygon needs updating
+	*/
+	bool UpdateShowcase();
+	
 private:
+	/*
+	* Bool to determine if the showcase is on or off
+	*/
 	bool grandShowcase;
 
+	/*
+	* Determines whether to rotate the image clockwise or counterclockwise
+	*/
 	bool clockwise = false;
 
+	/*
+	* Stores the current tranformations for passing to subsequent polygons
+	*/
 	vector<mat4> currentTransformations;
 
+	/*
+	* Angle to rotate the image
+	*/
 	int theta = 0;
 };
 
