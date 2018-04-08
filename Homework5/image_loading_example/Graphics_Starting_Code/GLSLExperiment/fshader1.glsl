@@ -87,7 +87,52 @@ void EmbossImage()
 
 void ToonRendering()
 {
-	
+	float magThreshold = 9.0;
+	float quantizeFactor = 9.0;
+	float quantizeValue = 9.0;
+
+	ivec2 ires = textureSize( texture, 0 );
+	float ResS = float( ires.s );
+	float ResT = float( ires.t );
+	vec3 irgb = texture2D( texture, texCoord ).rgb;
+
+	vec3 rgb = texture2D( texture, texCoord ).rgb;
+	vec2 stp0 = vec2( 1/ResS, 0 );
+	vec2 st0p = vec2( 0, 1/ResT );
+	vec2 stpp = vec2( 1/ResS, 1/ResT );
+	vec2 stpm = vec2( 1/ResS, -1/ResT );
+
+	float i00 = dot( texture2D( texture, texCoord ).rgb, sRGB );
+
+	float im1m1 = dot( texture2D( texture, texCoord - stpp ).rgb, sRGB );
+	float ip1p1 = dot( texture2D( texture, texCoord + stpp ).rgb, sRGB );
+
+	float im1p1 = dot( texture2D( texture, texCoord - stpm ).rgb, sRGB );
+	float ip1m1 = dot( texture2D( texture, texCoord + stpm ).rgb, sRGB );
+
+	float im10 = dot( texture2D( texture, texCoord - stp0 ).rgb, sRGB );
+	float ip10 = dot( texture2D( texture, texCoord + stp0 ).rgb, sRGB );
+
+	float i0m1 = dot( texture2D( texture, texCoord - st0p ).rgb, sRGB );
+	float i0p1 = dot( texture2D( texture, texCoord + st0p ).rgb, sRGB );
+
+	float h = -1.*im1p1-2.*i0p1-1.*ip1p1+1.*im1m1+2.*i0m1+1.*ip1m1;
+	float v = -1.*im1m1-2.*im10-1.*im1p1+1.*ip1m1+2.*ip10+1.*ip1p1;
+
+	float mag = length( vec2( h, v) );
+
+	if( mag > magThreshold )
+	{
+		fColor = vec4( 1, 1, 1, 1);
+	}
+	else
+	{
+		rgb.rgb *= quantizeFactor;
+		rgb.rgb += vec3( .5, .5, .5 );
+		ivec3 intrgb = ivec3( rgb.r, rgb.g, rgb.b );
+		rgb.rgb = vec3( intrgb ) / quantizeFactor;
+		fColor = vec4( rgb, 1);
+	}
 }
 
 void main() 
@@ -98,7 +143,8 @@ void main()
     		OriginalImage();
     		break;
 		case 1:
-			GrayScaleImage();
+			// GrayScaleImage();
+			ToonRendering();
 			break;
 		case 2:
 			NegativeImage();
