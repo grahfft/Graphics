@@ -23,7 +23,8 @@ void GrayScaleImage()
 void NegativeImage()
 {
 	vec3 irgb = texture2D( texture, texCoord ).rgb;
-	fColor = vec4( 1 - irgb.r, 1 - irgb.g, 1 - irgb.b, 1);
+	vec3 neg = vec3( 1, 1, 1) - irgb;
+	fColor = vec4( mix( irgb, neg, 1 ), 1 );
 }
 
 void EdgeDetectionImage()
