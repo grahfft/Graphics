@@ -180,8 +180,7 @@ keyboard( unsigned char key, int x, int y )
 		break;
 	case 'w':
 	case 'W':
-		// TODO: Key 'W': Display image with Twirl Transformation
-		glUniform1i(filter, 6);
+		glUniform1i(filter, 6); // 6 is marked in shader as TwirlImage
 		break;
 	case 'p':
 	case 'P':

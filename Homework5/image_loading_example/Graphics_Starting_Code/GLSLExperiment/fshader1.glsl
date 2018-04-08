@@ -135,6 +135,33 @@ void ToonRendering()
 	}
 }
 
+void TwirlImage()
+{
+	float uD = 60;
+	float uR = 1;
+
+	ivec2 ires = textureSize( texture, 0 );
+	float Res = float( ires.s );
+
+	vec2 st = texCoord;
+	float Radius = Res * uR;
+	vec2 xy = Res * st;
+
+	vec2 dxy = xy - Res/2;
+	float r = length( dxy );
+	float beta = atan( dxy.y, dxy.x ) + radians(uD) * (Radius - r)/Radius;
+
+	vec2 xy1 = xy;
+	if( r <= Radius )
+	{
+		xy1 = Res/2 + r * vec2( cos(beta), sin(beta) );
+	}
+	st = xy1/Res;
+
+	vec3 irgb = texture2D( texture, st ).rgb;
+	fColor = vec4( irgb, 1 );
+}
+
 void main() 
 { 
     switch( fragFilter )
@@ -156,6 +183,9 @@ void main()
 			break;
 		case 5:
 			ToonRendering();
+			break;
+		case 6:
+			TwirlImage();
 			break;
     	default:
     		OriginalImage();
