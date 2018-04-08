@@ -59,9 +59,9 @@ void EdgeDetectionImage()
 	float mag = length( vec2( h, v) );
 	vec3 target = vec3( mag, mag, mag );
 
-	float uT = 5.0;
+	float uT = 1.0;
 
-	fColor = vec4( mix( irgb, target, 3.0), 1);
+	fColor = vec4( mix( irgb, target, uT), 1);
 }
 
 void EmbossImage()
@@ -139,7 +139,7 @@ void ToonRendering()
 void TwirlImage()
 {
 	float uD = 60;
-	float uR = 1;
+	float uR = .3;
 
 	ivec2 ires = textureSize( texture, 0 );
 	float Res = float( ires.s );
