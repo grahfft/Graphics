@@ -176,8 +176,7 @@ keyboard( unsigned char key, int x, int y )
 		break;
 	case 't':
 	case 'T':
-		// TODO: Key 'T': Display image with Toon rendering
-		glUniform1i(filter, 5);
+		glUniform1i(filter, 5); // 5 is marked in shader as ToonRendering
 		break;
 	case 'w':
 	case 'W':

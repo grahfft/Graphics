@@ -87,9 +87,9 @@ void EmbossImage()
 
 void ToonRendering()
 {
-	float magThreshold = 9.0;
-	float quantizeFactor = 9.0;
-	float quantizeValue = 9.0;
+	float magThreshold = 1.0;
+	float quantizeFactor = 10.0;
+	float quantizeValue = 10.0;
 
 	ivec2 ires = textureSize( texture, 0 );
 	float ResS = float( ires.s );
@@ -123,7 +123,7 @@ void ToonRendering()
 
 	if( mag > magThreshold )
 	{
-		fColor = vec4( 1, 1, 1, 1);
+		fColor = vec4( 0, 0, 0, 1);
 	}
 	else
 	{
@@ -143,8 +143,7 @@ void main()
     		OriginalImage();
     		break;
 		case 1:
-			// GrayScaleImage();
-			ToonRendering();
+			GrayScaleImage();
 			break;
 		case 2:
 			NegativeImage();
