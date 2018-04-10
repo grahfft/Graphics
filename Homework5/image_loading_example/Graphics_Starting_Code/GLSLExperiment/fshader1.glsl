@@ -7,6 +7,7 @@ out vec4 fColor;
 
 uniform sampler2D texture;
 const vec3 sRGB = vec3( 0.2125, 0.7154, 0.0721);
+const float PI = 3.14159265;
 
 void OriginalImage()
 {
@@ -163,6 +164,29 @@ void TwirlImage()
 	fColor = vec4( irgb, 1 );
 }
 
+void RippleImage()
+{
+	int ax = 10;
+	int ay = 15;
+
+	int tx = 120;
+	int ty = 250;
+
+	ivec2 ires = textureSize( texture, 0 );
+	float ResS = float( ires.s );
+	float ResT = float( ires.t );
+
+	vec2 xy = vec2(ResS * texCoord.x, ResT * texCoord.y);
+
+	float x = xy.x + ax * sin( (2 * PI * xy.y) / tx );
+	float y = xy.y + ay * sin( (2 * PI * xy.x) / ty );
+
+	vec2 st = vec2( x/ResS, y/ResT );
+	
+	vec3 irgb = texture2D( texture, st ).rgb;
+	fColor = vec4( irgb, 1 );
+}
+
 void main() 
 { 
     switch( fragFilter )
@@ -187,6 +211,9 @@ void main()
 			break;
 		case 6:
 			TwirlImage();
+			break;
+		case 7:
+			RippleImage();
 			break;
     	default:
     		OriginalImage();

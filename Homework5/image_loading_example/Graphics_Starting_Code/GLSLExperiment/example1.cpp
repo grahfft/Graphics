@@ -184,8 +184,7 @@ keyboard( unsigned char key, int x, int y )
 		break;
 	case 'p':
 	case 'P':
-		// TODO: Key 'P': Display image with Ripple Transformation
-		glUniform1i(filter, 7);
+		glUniform1i(filter, 7); // 7 is marked in shader as RippleImage
 		break;
 	case 's':
 	case 'S':
