@@ -187,6 +187,47 @@ void RippleImage()
 	fColor = vec4( irgb, 1 );
 }
 
+void SphereTransformImage()
+{
+	float p = 1.8;
+	
+	ivec2 ires = textureSize( texture, 0 );
+	float ResS = float( ires.s );
+	float ResT = float( ires.t );
+
+	// Need image center and max r
+	vec2 center = vec2( ResS/2, ResT/2 );
+	float maxR = ResS/2;
+
+	vec2 xyprime = vec2(ResS * texCoord.x, ResT * texCoord.y);
+
+	vec2 dxy = vec2( xyprime.x - center.x, xyprime.y - center.y );
+
+	float r = sqrt( (dxy.x * dxy.x) + (dxy.y * dxy.y) );
+
+	float z = sqrt( (maxR * maxR) + (r * r) );
+
+	float betaX = ( 1 - 1/p ) * asin( dxy.x / sqrt( (dxy.x * dxy.x) + (z * z) ) );
+
+	float betaY = ( 1 - 1/p ) * asin( dxy.y / sqrt( (dxy.y * dxy.y) + (z * z) ) );
+
+	float xTerm = 0;
+	float yTerm = 0;
+
+	if(r <= maxR)
+	{
+		xTerm = z * tan( betaX );
+		yTerm = z * tan( betaY );
+	}
+
+	float x = xyprime.x - xTerm;
+	float y = xyprime.y - yTerm;
+
+	vec2 st = vec2( x/ResS, y/ResT );	
+	vec3 irgb = texture2D( texture, st ).rgb;
+	fColor = vec4( irgb, 1 );
+}
+
 void main() 
 { 
     switch( fragFilter )
@@ -214,6 +255,9 @@ void main()
 			break;
 		case 7:
 			RippleImage();
+			break;
+		case 8:
+			SphereTransformImage();
 			break;
     	default:
     		OriginalImage();
