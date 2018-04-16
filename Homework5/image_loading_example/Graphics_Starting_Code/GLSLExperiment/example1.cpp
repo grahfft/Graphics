@@ -12,6 +12,7 @@
 
 #include "Angel.h"
 #include "bmpread.h"
+#include <string>
 
 typedef Angel::vec4 point4;
 typedef Angel::vec4 color4;
@@ -52,16 +53,23 @@ GLuint filter;
 bmpread_t bitmap;
 
 static  GLuint  texture = 0;
+
+std::string avengers = "AvengersIWPoster.bmp";
+
+std::string usain = "usain_bolt.bmp";
+
 //----------------------------------------------------------------------------
 
 void
 init( void )
 {
-	printf("Loading usain_bolt.bmp\n");
+	std::string image = avengers;
 
-	if(!bmpread("usain_bolt.bmp", 0, &bitmap))
+	std::cout << "Loading " << image << std::endl;
+
+	if(!bmpread(image.c_str(), 0, &bitmap))
 	{
-		fprintf(stderr, "%s:error loading bitmap file\n", "usain_bolt.bmp");
+		fprintf(stderr, "%s:error loading bitmap file\n", image.c_str());
 		exit(1);
 	}
 
@@ -188,8 +196,7 @@ keyboard( unsigned char key, int x, int y )
 		break;
 	case 's':
 	case 'S':
-		// TODO: Key 'S': Display image with Spherical Transformation
-		glUniform1i(filter, 8);
+		glUniform1i(filter, 8); // 8 is marked in shader as SphereTransformImage
 		break;
 	case 033: // Escape Key
 	case 'q': case 'Q':

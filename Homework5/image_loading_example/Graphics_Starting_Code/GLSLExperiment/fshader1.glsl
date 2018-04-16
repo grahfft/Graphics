@@ -140,7 +140,7 @@ void ToonRendering()
 void TwirlImage()
 {
 	float uD = 60;
-	float uR = .3;
+	float uR = .5;
 
 	ivec2 ires = textureSize( texture, 0 );
 	float Res = float( ires.s );
@@ -195,9 +195,8 @@ void SphereTransformImage()
 	float ResS = float( ires.s );
 	float ResT = float( ires.t );
 
-	// Need image center and max r
 	vec2 center = vec2( ResS/2, ResT/2 );
-	float maxR = ResS/2;
+	float maxR = ResS/3;
 
 	vec2 xyprime = vec2(ResS * texCoord.x, ResT * texCoord.y);
 
@@ -205,11 +204,11 @@ void SphereTransformImage()
 
 	float r = sqrt( (dxy.x * dxy.x) + (dxy.y * dxy.y) );
 
-	float z = sqrt( (maxR * maxR) + (r * r) );
+	float z = sqrt( (maxR * maxR) - (r * r) );
 
-	float betaX = ( 1 - 1/p ) * asin( dxy.x / sqrt( (dxy.x * dxy.x) + (z * z) ) );
+	float betaX = ( 1 - (1/p) ) * asin( dxy.x / sqrt( (dxy.x * dxy.x) + (z * z) ) );
 
-	float betaY = ( 1 - 1/p ) * asin( dxy.y / sqrt( (dxy.y * dxy.y) + (z * z) ) );
+	float betaY = ( 1 - (1/p) ) * asin( dxy.y / sqrt( (dxy.y * dxy.y) + (z * z) ) );
 
 	float xTerm = 0;
 	float yTerm = 0;
